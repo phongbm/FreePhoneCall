@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="com.phongbm.freephonecall.MainActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tab"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:tabIndicatorColor="#ffffff" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <include layout="@layout/content_main" />
+
+    <!--<android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@android:drawable/ic_dialog_email" />-->
+
+    <com.phongbm.libraries.FadingBackgroundView
+        android:id="@+id/fading_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.phongbm.libraries.FloatingActionMenu
+        android:id="@+id/floating_action_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="4dp"
+        fab:fab_labelStyle="@style/fab_labels_style">
+
+        <com.phongbm.libraries.FloatingActionButton
+            android:id="@+id/a"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            fab:fab_labelText="a"
+            fab:fab_normal_icon="@drawable/ic_add_white_18dp"
+            fab:fab_type="mini" />
+
+        <com.phongbm.libraries.FloatingActionButton
+            android:id="@+id/b"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            fab:fab_labelText="b"
+            fab:fab_normal_icon="@drawable/ic_mode_edit_white_18dp"
+            fab:fab_type="mini" />
+
+        <com.phongbm.libraries.FloatingActionButton
+            android:id="@+id/c"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            fab:fab_labelText="c"
+            fab:fab_normal_icon="@drawable/ic_add_white_18dp"
+            fab:fab_type="mini" />
+
+        <com.phongbm.libraries.FloatingActionToggleButton
+            android:id="@+id/floating_action_toggle_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            fab:fab_colorNormal="@color/colorPrimary"
+            fab:fab_colorPressed="@color/colorPrimaryDark"
+            fab:fab_labelText="Toggle Button"
+            fab:fab_normal_icon="@drawable/ic_add_white_24dp"
+            fab:fab_toggle_icon="@drawable/ic_mode_edit_white_24dp" />
+
+    </com.phongbm.libraries.FloatingActionMenu>
+
+</android.support.design.widget.CoordinatorLayout>
