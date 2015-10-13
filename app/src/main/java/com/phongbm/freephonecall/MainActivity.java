@@ -11,7 +11,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.phongbm.libraries.FadingBackgroundView;
 import com.phongbm.libraries.FloatingActionButton;
@@ -37,7 +36,6 @@ public class MainActivity extends AppCompatActivity
         this.initializeDrawerLayout();
         this.initializeNavigationView();
         this.initializeFloatingActionMenu();
-        // this.initializeFAB();
 
         viewPagerAdapter = new ViewPagerAdapter(this, this.getSupportFragmentManager());
         viewPager = (ViewPager) this.findViewById(R.id.view_pager);
@@ -76,36 +74,17 @@ public class MainActivity extends AppCompatActivity
                         FloatingActionToggleButton floatingActionToggleButton =
                                 (FloatingActionToggleButton) fab;
                         if (floatingActionToggleButton.isToggleOn()) {
-                            Toast.makeText(MainActivity.this, "Close", Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(MainActivity.this, "Open", Toast.LENGTH_SHORT).show();
                         }
                         break;
-                    case R.id.a:
-                        Toast.makeText(MainActivity.this, "a", Toast.LENGTH_SHORT).show();
+                    case R.id.btnAddFriend:
                         break;
-                    case R.id.b:
-                        Toast.makeText(MainActivity.this, "b", Toast.LENGTH_SHORT).show();
-                        break;
-                    case R.id.c:
-                        Toast.makeText(MainActivity.this, "c", Toast.LENGTH_SHORT).show();
+                    case R.id.btnNewVoiceCall:
                         break;
                 }
             }
         });
     }
-
-    /*private void initializeFAB() {
-        FloatingActionButton fab = (FloatingActionButton) this.findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "OK", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null)
-                        .show();
-            }
-        });
-    }*/
 
     @Override
     public void onBackPressed() {

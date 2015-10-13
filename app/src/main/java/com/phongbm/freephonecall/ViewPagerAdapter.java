@@ -9,12 +9,12 @@ import java.util.ArrayList;
 
 public class ViewPagerAdapter extends FragmentPagerAdapter {
     private ArrayList<Fragment> pages;
-    private String[] titles = new String[]{"Contacts", "Call Logs"};
+    private String[] titles = new String[]{"Friends", "Call Logs"};
 
     public ViewPagerAdapter(Context context, FragmentManager fragmentManager) {
         super(fragmentManager);
         pages = new ArrayList<>();
-        pages.add(new ContactFragment(context));
+        pages.add(new FriendFragment(context));
         pages.add(new CallLogFragment(context));
     }
 

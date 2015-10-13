@@ -32,14 +32,6 @@
 
     <include layout="@layout/content_main" />
 
-    <!--<android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/ic_dialog_email" />-->
-
     <com.phongbm.libraries.FadingBackgroundView
         android:id="@+id/fading_background"
         android:layout_width="match_parent"
@@ -54,30 +46,25 @@
         fab:fab_labelStyle="@style/fab_labels_style">
 
         <com.phongbm.libraries.FloatingActionButton
-            android:id="@+id/a"
+            android:id="@+id/btnNewVoiceCall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            fab:fab_labelText="a"
-            fab:fab_normal_icon="@drawable/ic_add_white_18dp"
+            fab:fab_colorNormal="#2196f3"
+            fab:fab_colorPressed="#1e88e5"
+            fab:fab_labelText="NEW VOICE CALL"
+            fab:fab_normal_icon="@drawable/ic_voice_call_18dp"
             fab:fab_type="mini" />
 
         <com.phongbm.libraries.FloatingActionButton
-            android:id="@+id/b"
+            android:id="@+id/btnAddFriend"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            fab:fab_labelText="b"
-            fab:fab_normal_icon="@drawable/ic_mode_edit_white_18dp"
-            fab:fab_type="mini" />
-
-        <com.phongbm.libraries.FloatingActionButton
-            android:id="@+id/c"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            fab:fab_labelText="c"
-            fab:fab_normal_icon="@drawable/ic_add_white_18dp"
+            fab:fab_colorNormal="#4caf50"
+            fab:fab_colorPressed="#43a047"
+            fab:fab_labelText="ADDING A FRIEND"
+            fab:fab_normal_icon="@drawable/ic_add_friend_18dp"
             fab:fab_type="mini" />
 
         <com.phongbm.libraries.FloatingActionToggleButton
@@ -85,11 +72,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            fab:fab_colorNormal="@color/colorPrimary"
-            fab:fab_colorPressed="@color/colorPrimaryDark"
-            fab:fab_labelText="Toggle Button"
+            fab:fab_colorNormal="#ff5722"
+            fab:fab_colorPressed="#f4511e"
+            fab:fab_labelText="CLOSE TOGGLE MENU"
             fab:fab_normal_icon="@drawable/ic_add_white_24dp"
-            fab:fab_toggle_icon="@drawable/ic_mode_edit_white_24dp" />
+            fab:fab_toggle_icon="@drawable/ic_delete_24dp" />
 
     </com.phongbm.libraries.FloatingActionMenu>
 

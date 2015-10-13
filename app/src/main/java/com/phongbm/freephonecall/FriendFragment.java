@@ -9,12 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 @SuppressLint("ValidFragment")
-public class ContactFragment extends Fragment {
+public class FriendFragment extends Fragment {
     private View view;
 
-    public ContactFragment(Context context) {
+    public FriendFragment(Context context) {
         LayoutInflater layoutInflater = LayoutInflater.from(context);
-        view = layoutInflater.inflate(R.layout.fragment_contact, null);
+        view = layoutInflater.inflate(R.layout.fragment_friend, null);
     }
 
     @Override
@@ -23,8 +23,7 @@ public class ContactFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return view;
     }
 
