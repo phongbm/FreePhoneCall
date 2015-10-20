@@ -23,7 +23,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.i(TAG, "onCreateView...");
-        view = inflater.inflate(R.layout.fragment_home, null);
+        view = inflater.inflate(R.layout.fragment_home, container, false);
         this.initializeComponent();
         return view;
     }

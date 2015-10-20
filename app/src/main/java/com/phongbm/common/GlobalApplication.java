@@ -12,7 +12,8 @@ import com.parse.ParseInstallation;
 public class GlobalApplication extends Application {
     private static final String TAG = GlobalApplication.class.getSimpleName();
 
-    public static int widthScreen, heightScreen;
+    public static int widthScreen;
+    public static int heightScreen;
     public static float densityDPI;
 
     @Override
@@ -25,7 +26,7 @@ public class GlobalApplication extends Application {
 
     private void initializeParseServer() {
         Parse.initialize(this, ServerInfo.PARSE_APPLICATION_ID, ServerInfo.PARSE_CLIENT_KEY);
-        ParseInstallation.getCurrentInstallation().saveInBackground();
+        // ParseInstallation.getCurrentInstallation().saveInBackground();
     }
 
     private void initializeComponent() {

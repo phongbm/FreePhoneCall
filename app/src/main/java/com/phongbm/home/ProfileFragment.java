@@ -34,7 +34,7 @@ import java.util.regex.Pattern;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class ProfileInformationFragment extends Fragment implements View.OnClickListener {
+public class ProfileFragment extends Fragment implements View.OnClickListener {
     private static final int REQUEST_TAKE_PHOTO = 0;
     private static final int REQUEST_UPLOAD_PHOTO = 1;
     private static final String EMAIL_PATTERN =
@@ -52,13 +52,13 @@ public class ProfileInformationFragment extends Fragment implements View.OnClick
     private Bitmap bitmapAvatar;
     private CircleImageView imgAvatar;
 
-    public ProfileInformationFragment() {
+    public ProfileFragment() {
         pattern = Pattern.compile(EMAIL_PATTERN);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_profile_infomation, container, false);
+        view = inflater.inflate(R.layout.fragment_profile, container, false);
         this.initializeToolbar();
         this.initializeComponent();
         return view;
@@ -94,7 +94,7 @@ public class ProfileInformationFragment extends Fragment implements View.OnClick
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s != null && s.length() > 1) {
                     isFillFirstName = true;
-                    ProfileInformationFragment.this.enabledButtonOK();
+                    ProfileFragment.this.enabledButtonOK();
                 } else {
                     isFillFirstName = false;
                     btnOK.setEnabled(false);
@@ -114,7 +114,7 @@ public class ProfileInformationFragment extends Fragment implements View.OnClick
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s != null && s.length() > 1) {
                     isFillLastName = true;
-                    ProfileInformationFragment.this.enabledButtonOK();
+                    ProfileFragment.this.enabledButtonOK();
                 } else {
                     isFillLastName = false;
                     btnOK.setEnabled(false);
@@ -134,7 +134,7 @@ public class ProfileInformationFragment extends Fragment implements View.OnClick
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s != null && s.length() > 1) {
                     isFillEmail = true;
-                    ProfileInformationFragment.this.enabledButtonOK();
+                    ProfileFragment.this.enabledButtonOK();
                 } else {
                     isFillEmail = false;
                     btnOK.setEnabled(false);

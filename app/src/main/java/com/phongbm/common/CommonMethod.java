@@ -95,7 +95,7 @@ public class CommonMethod {
     public static void uploadAvatar(ParseUser parseUser, Bitmap avatar) {
         if (parseUser == null) return;
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        avatar.compress(Bitmap.CompressFormat.JPEG, 80, byteArrayOutputStream);
+        avatar.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
         byte[] bytes = byteArrayOutputStream.toByteArray();
         if (bytes != null) {
             ParseFile parseFile = new ParseFile(bytes);
@@ -119,8 +119,7 @@ public class CommonMethod {
         return spannableString;
     }
 
-    public Bitmap decodeSampledBitmapFromResource(String uri,
-                                                  int reqWidth, int reqHeight) {
+    public Bitmap decodeSampledBitmapFromResource(String uri, int reqWidth, int reqHeight) {
         final BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeFile(uri, options);
@@ -130,8 +129,7 @@ public class CommonMethod {
         return BitmapFactory.decodeFile(uri, options);
     }
 
-    public int calculateInSampleSize(BitmapFactory.Options options,
-                                     int reqWidth, int reqHeight) {
+    public int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
         final int height = options.outHeight;
         final int width = options.outWidth;
         int inSampleSize = 1;

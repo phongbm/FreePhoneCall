@@ -15,7 +15,7 @@ import com.phongbm.home.MainFragment;
 
 public class SplashActivity extends AppCompatActivity {
     private static final String TAG = SplashActivity.class.getSimpleName();
-    private final int SPLASH_DISPLAY_LENGTH = 3000;
+    private static final int SPLASH_DISPLAY_LENGTH = 3000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,8 +33,8 @@ public class SplashActivity extends AppCompatActivity {
                 ParseUser currentUser = ParseUser.getCurrentUser();
                 if (currentUser != null) {
                     Log.i(TAG, "ParseUser NOT NULL");
-                    /*currentUser.put("online", true);
-                    currentUser.saveInBackground();*/
+                    currentUser.put("online", true);
+                    currentUser.saveInBackground();
                     Intent intent = new Intent(SplashActivity.this, MainActivity.class);
                     SplashActivity.this.startActivity(intent);
                 } else {

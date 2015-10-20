@@ -38,7 +38,8 @@
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent">
 
                     <de.hdodenhof.circleimageview.CircleImageView
                         android:layout_width="168dp"
@@ -151,12 +152,13 @@
                 </android.support.design.widget.TextInputLayout>
 
                 <TextView
+                    android:id="@+id/button_forgot_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="end"
                     android:text="@string/forgot_password"
                     android:textColor="#666666"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:textStyle="normal" />
 
                 <Button

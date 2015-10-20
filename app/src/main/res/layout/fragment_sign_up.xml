@@ -143,7 +143,7 @@
                     android:gravity="center"
                     android:text="@string/term_condition"
                     android:textColor="#666666"
-                    android:textSize="12sp" />
+                    android:textSize="14sp" />
 
                 <Button
                     android:id="@+id/btn_sign_up"

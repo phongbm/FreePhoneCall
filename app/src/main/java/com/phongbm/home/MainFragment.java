@@ -11,7 +11,7 @@ public class MainFragment extends AppCompatActivity {
     private HomeFragment homeFragment = new HomeFragment();
     private SignInFragment signInFragment = new SignInFragment();
     private SignUpFragment signUpFragment = new SignUpFragment();
-    private ProfileInformationFragment profileInformationFragment = new ProfileInformationFragment();
+    private ProfileFragment profileFragment = new ProfileFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,9 +40,9 @@ public class MainFragment extends AppCompatActivity {
                 .replace(android.R.id.content, signUpFragment).commit();
     }
 
-    public void showProfileInformationFragment() {
+    public void showProfileFragment() {
         this.getFragmentManager().beginTransaction()
-                .replace(android.R.id.content, profileInformationFragment).commit();
+                .replace(android.R.id.content, profileFragment).commit();
     }
 
     @Override
@@ -50,7 +50,7 @@ public class MainFragment extends AppCompatActivity {
         if (signInFragment.isVisible() || signUpFragment.isVisible()) {
             this.showHomeFragment();
         } else {
-            if (!profileInformationFragment.isVisible()) {
+            if (!profileFragment.isVisible()) {
                 super.onBackPressed();
             }
         }
