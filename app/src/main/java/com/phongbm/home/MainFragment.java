@@ -1,4 +1,4 @@
-package com.phongbm.loginsignup;
+package com.phongbm.home;
 
 import android.graphics.Color;
 import android.os.Build;
@@ -10,9 +10,8 @@ import android.view.WindowManager;
 public class MainFragment extends AppCompatActivity {
     private HomeFragment homeFragment = new HomeFragment();
     private SignInFragment signInFragment = new SignInFragment();
-    private SignupFragment signupFragment = new SignupFragment();
+    private SignUpFragment signUpFragment = new SignUpFragment();
     private ProfileInformationFragment profileInformationFragment = new ProfileInformationFragment();
-    private ProfilePictureFragment profilePictureFragment = new ProfilePictureFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,14 +30,14 @@ public class MainFragment extends AppCompatActivity {
                 .replace(android.R.id.content, homeFragment).commit();
     }
 
-    public void showLoginFragment() {
+    public void showSignInFragment() {
         this.getFragmentManager().beginTransaction()
                 .replace(android.R.id.content, signInFragment).commit();
     }
 
-    public void showSigupFragment() {
+    public void showSigUpFragment() {
         this.getFragmentManager().beginTransaction()
-                .replace(android.R.id.content, signupFragment).commit();
+                .replace(android.R.id.content, signUpFragment).commit();
     }
 
     public void showProfileInformationFragment() {
@@ -46,36 +45,13 @@ public class MainFragment extends AppCompatActivity {
                 .replace(android.R.id.content, profileInformationFragment).commit();
     }
 
-    public void showProfileInformationFragmentBack() {
-        this.getFragmentManager().beginTransaction()
-                .replace(android.R.id.content, profileInformationFragment).commit();
-    }
-
-    public void showProfilePictureFragment() {
-        this.getFragmentManager().beginTransaction()
-                .replace(android.R.id.content, profilePictureFragment).commit();
-    }
-
-    public ProfileInformationFragment getProfileInformationFragment() {
-        return profileInformationFragment;
-    }
-
-    public SignupFragment getSignUpFragment() {
-        return signupFragment;
-    }
-
     @Override
     public void onBackPressed() {
-        if (signInFragment.isVisible() || signupFragment.isVisible()) {
+        if (signInFragment.isVisible() || signUpFragment.isVisible()) {
             this.showHomeFragment();
         } else {
-            if (profileInformationFragment.isVisible()) {
-            } else {
-                if (profilePictureFragment.isVisible()) {
-                    this.showProfileInformationFragmentBack();
-                } else {
-                    super.onBackPressed();
-                }
+            if (!profileInformationFragment.isVisible()) {
+                super.onBackPressed();
             }
         }
     }

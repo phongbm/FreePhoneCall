@@ -1,18 +1,15 @@
-package com.phongbm.loginsignup;
+package com.phongbm.home;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -20,55 +17,54 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 
-import com.parse.ParseException;
-import com.parse.ParseUser;
-import com.parse.SignUpCallback;
 import com.phongbm.common.CommonValue;
-import com.phongbm.common.GlobalApplication;
 import com.phongbm.freephonecall.R;
 
-public class SignupFragment extends Fragment implements View.OnClickListener {
-    private static final String TAG = "SignupFragment";
-    private static final int REQUEST_SIGN_UP_FRAGMENT = 0;
+public class SignUpFragment extends Fragment implements View.OnClickListener {
+    private static final String TAG = "SignUpFragment";
+    private static final int REQUEST_COUNTRY_CODE = 0;
 
     private View view;
     private EditText edtPhoneNumber, edtPassword, edtConfirmPassword, edtCode;
-    private FloatingActionButton btnLogIn;
     private Button btnSignUp;
     private CheckBox checkBoxAgree;
     private boolean isFillPhoneNumber, isFillPassword, isFillConfirmPassword, isCheckBoxChecked;
-    private String countryCode;
-    private Activity activity;
-    private String phoneNumber;
+    private String countryCode, phoneNumber;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_signup, null);
+        view = inflater.inflate(R.layout.fragment_sign_up, null);
+        this.initializeToolbar();
         this.initializeComponent();
-        activity = this.getActivity();
         return view;
     }
 
+    private void initializeToolbar() {
+        Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
+        AppCompatActivity activity = (MainFragment) this.getActivity();
+        activity.setSupportActionBar(toolbar);
+        if (activity.getSupportActionBar() != null) {
+            activity.getSupportActionBar().setTitle(R.string.sign_up);
+            activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
     private void initializeComponent() {
-        btnSignUp = (Button) view.findViewById(R.id.btnSignUp);
+        btnSignUp = (Button) view.findViewById(R.id.btn_sign_up);
         btnSignUp.setOnClickListener(this);
-        btnLogIn = (FloatingActionButton) view.findViewById(R.id.btnLogIn);
-        btnLogIn.setOnClickListener(this);
-        edtPhoneNumber = (EditText) view.findViewById(R.id.edtPhoneNumber);
-        edtPassword = (EditText) view.findViewById(R.id.edtPassword);
-        edtConfirmPassword = (EditText) view.findViewById(R.id.edtConfirmPassword);
-        checkBoxAgree = (CheckBox) view.findViewById(R.id.checkBoxAgree);
+        edtPhoneNumber = (EditText) view.findViewById(R.id.edt_phone_number);
+        edtPassword = (EditText) view.findViewById(R.id.edt_password);
+        edtConfirmPassword = (EditText) view.findViewById(R.id.edt_confirm_password);
+        checkBoxAgree = (CheckBox) view.findViewById(R.id.checkbox_agree);
         checkBoxAgree.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (checkBoxAgree.isChecked()) {
                     isCheckBoxChecked = true;
-                    SignupFragment.this.enabledButtonSignUp();
-                    checkBoxAgree.setTextColor(ContextCompat.getColor(activity, R.color.green_500));
+                    SignUpFragment.this.enabledButtonSignUp();
                 } else {
                     isCheckBoxChecked = false;
                     btnSignUp.setEnabled(false);
-                    checkBoxAgree.setTextColor(Color.parseColor("#666666"));
                 }
             }
         });
@@ -81,7 +77,7 @@ public class SignupFragment extends Fragment implements View.OnClickListener {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s != null && s.length() > 1) {
                     isFillPhoneNumber = true;
-                    SignupFragment.this.enabledButtonSignUp();
+                    SignUpFragment.this.enabledButtonSignUp();
                 } else {
                     isFillPhoneNumber = false;
                     btnSignUp.setEnabled(false);
@@ -101,10 +97,10 @@ public class SignupFragment extends Fragment implements View.OnClickListener {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s != null && s.length() > 1) {
                     isFillPassword = true;
-                    SignupFragment.this.enabledButtonSignUp();
+                    SignUpFragment.this.enabledButtonSignUp();
                 } else {
                     isFillPassword = false;
-                    SignupFragment.this.enabledButtonSignUp();
+                    SignUpFragment.this.enabledButtonSignUp();
                 }
             }
 
@@ -134,10 +130,10 @@ public class SignupFragment extends Fragment implements View.OnClickListener {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s != null && s.length() > 1) {
                     isFillConfirmPassword = true;
-                    SignupFragment.this.enabledButtonSignUp();
+                    SignUpFragment.this.enabledButtonSignUp();
                 } else {
                     isFillConfirmPassword = false;
-                    SignupFragment.this.enabledButtonSignUp();
+                    SignUpFragment.this.enabledButtonSignUp();
                 }
             }
 
@@ -158,7 +154,7 @@ public class SignupFragment extends Fragment implements View.OnClickListener {
                 }
             }
         });
-        edtCode = (EditText) view.findViewById(R.id.edtCode);
+        edtCode = (EditText) view.findViewById(R.id.edt_country_code);
         edtCode.setOnClickListener(this);
         edtCode.setText("United States (+1)");
         countryCode = "(+1)";
@@ -172,10 +168,23 @@ public class SignupFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                ((MainFragment) this.getActivity()).showHomeFragment();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public void onClick(final View view) {
         switch (view.getId()) {
-            case R.id.btnSignUp:
-                final ProgressDialog progressDialog = new ProgressDialog(activity);
+            case R.id.btn_sign_up:
+                ((MainFragment) SignUpFragment.this.getActivity())
+                        .showProfileInformationFragment();
+                /*
+                final ProgressDialog progressDialog = new ProgressDialog(this.getActivity());
                 progressDialog.setTitle("Signing up");
                 progressDialog.setMessage("Please wait...");
                 progressDialog.setCanceledOnTouchOutside(false);
@@ -192,13 +201,9 @@ public class SignupFragment extends Fragment implements View.OnClickListener {
                     @Override
                     public void done(ParseException e) {
                         if (e == null) {
-                            newUser.put("isOnline", true);
+                            newUser.put("online", true);
                             newUser.saveInBackground();
-
                             progressDialog.dismiss();
-                            btnLogIn.setBackgroundTintList(ColorStateList
-                                    .valueOf(Color.parseColor("#e91e63")));
-                            btnLogIn.setImageResource(R.drawable.ic_checkmark);
                             Snackbar snackbar = Snackbar.make(view, "Registered successfully",
                                     Snackbar.LENGTH_LONG)
                                     .setAction("ACTION", null)
@@ -206,11 +211,12 @@ public class SignupFragment extends Fragment implements View.OnClickListener {
                                         @Override
                                         public void onDismissed(Snackbar snackbar, int event) {
                                             super.onDismissed(snackbar, event);
-                                            ((MainFragment) activity).showProfileInformationFragment();
+                                            ((MainFragment) SignUpFragment.this.getActivity())
+                                                    .showProfileInformationFragment();
                                         }
                                     });
-                            View snackbarView = snackbar.getView();
-                            snackbarView.setBackgroundColor(Color.parseColor("#4caf50"));
+                            View snackBarView = snackbar.getView();
+                            snackBarView.setBackgroundColor(Color.parseColor("#4caf50"));
                             snackbar.show();
                         } else {
                             progressDialog.dismiss();
@@ -220,30 +226,24 @@ public class SignupFragment extends Fragment implements View.OnClickListener {
                         }
                     }
                 });
+                */
                 break;
-            case R.id.btnLogIn:
-                ((MainFragment) activity).showLoginFragment();
-                break;
-            case R.id.edtCode:
-                Intent intent = new Intent(activity, CountryCodeActivity.class);
-                this.startActivityForResult(intent, REQUEST_SIGN_UP_FRAGMENT);
+            case R.id.edt_country_code:
+                Intent intent = new Intent(this.getActivity(), CountryCodeActivity.class);
+                this.startActivityForResult(intent, REQUEST_COUNTRY_CODE);
                 break;
         }
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_SIGN_UP_FRAGMENT && resultCode == Activity.RESULT_OK) {
+        if (requestCode == REQUEST_COUNTRY_CODE && resultCode == Activity.RESULT_OK) {
             if (data != null) {
                 String content = data.getStringExtra(CommonValue.COUNTRY_CODE);
                 countryCode = content.substring(content.indexOf("(+"));
                 edtCode.setText(content);
             }
         }
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
     }
 
 }

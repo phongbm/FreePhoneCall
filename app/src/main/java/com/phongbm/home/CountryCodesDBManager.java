@@ -1,4 +1,4 @@
-package com.phongbm.loginsignup;
+package com.phongbm.home;
 
 import android.content.Context;
 import android.content.res.AssetManager;

@@ -1,17 +1,17 @@
 package com.phongbm.freephonecall;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 
 import com.parse.ParseUser;
-import com.phongbm.loginsignup.MainFragment;
+import com.phongbm.home.MainFragment;
 
 public class SplashActivity extends AppCompatActivity {
     private static final String TAG = SplashActivity.class.getSimpleName();
@@ -25,7 +25,7 @@ public class SplashActivity extends AppCompatActivity {
             Window statusBar = this.getWindow();
             statusBar.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             statusBar.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            statusBar.setStatusBarColor(Color.parseColor("#1976d2"));
+            statusBar.setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
         }
         new Handler().postDelayed(new Runnable() {
             @Override

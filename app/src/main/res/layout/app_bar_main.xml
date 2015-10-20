@@ -50,8 +50,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            fab:fab_colorNormal="#2196f3"
-            fab:fab_colorPressed="#1e88e5"
+            fab:fab_colorNormal="#ff5722"
+            fab:fab_colorPressed="#f4511e"
             fab:fab_labelText="NEW VOICE CALL"
             fab:fab_normal_icon="@drawable/ic_voice_call_18dp"
             fab:fab_type="mini" />
@@ -72,8 +72,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            fab:fab_colorNormal="#ff5722"
-            fab:fab_colorPressed="#f4511e"
+            fab:fab_colorNormal="#2196f3"
+            fab:fab_colorPressed="#1e88e5"
             fab:fab_labelText="CLOSE TOGGLE MENU"
             fab:fab_normal_icon="@drawable/ic_add_white_24dp"
             fab:fab_toggle_icon="@drawable/ic_delete_24dp" />

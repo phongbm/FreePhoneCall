@@ -1,4 +1,4 @@
-package com.phongbm.loginsignup;
+package com.phongbm.home;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -13,8 +13,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,7 +43,6 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.i(TAG, "onCreate...");
-        this.setHasOptionsMenu(true);
     }
 
     @Override
@@ -70,7 +67,6 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
     private void initializeComponent() {
         btnSignIn = (Button) view.findViewById(R.id.btn_sign_in);
         btnSignIn.setOnClickListener(this);
-        view.findViewById(R.id.btn_sign_up).setOnClickListener(this);
         edtPhoneNumber = (EditText) view.findViewById(R.id.edt_phone_number);
         edtPassword = (EditText) view.findViewById(R.id.edt_password);
         edtPhoneNumber.addTextChangedListener(new TextWatcher() {
@@ -127,19 +123,11 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.fragment_main, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 ((MainFragment) this.getActivity()).showHomeFragment();
                 break;
-            case R.id.action_forgot_password:
-                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -150,9 +138,6 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
             case R.id.edt_country_code:
                 Intent intent = new Intent(this.getActivity(), CountryCodeActivity.class);
                 this.startActivityForResult(intent, REQUEST_COUNTRY_CODE);
-                break;
-            case R.id.btn_sign_up:
-                ((MainFragment) this.getActivity()).showSigupFragment();
                 break;
             case R.id.btn_sign_in:
                 final ProgressDialog progressDialog = new ProgressDialog(this.getActivity());

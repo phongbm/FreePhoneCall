@@ -11,8 +11,9 @@ import com.parse.ParseInstallation;
 
 public class GlobalApplication extends Application {
     private static final String TAG = GlobalApplication.class.getSimpleName();
-    public static int WIDTH_SCREEN, HEIGHT_SCREEN;
-    public static float DENSITY_DPI;
+
+    public static int widthScreen, heightScreen;
+    public static float densityDPI;
 
     @Override
     public void onCreate() {
@@ -31,9 +32,9 @@ public class GlobalApplication extends Application {
         WindowManager windowManager = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics metrics = new DisplayMetrics();
         windowManager.getDefaultDisplay().getMetrics(metrics);
-        WIDTH_SCREEN = metrics.widthPixels;
-        HEIGHT_SCREEN = metrics.heightPixels;
-        DENSITY_DPI = metrics.densityDpi;
+        widthScreen = metrics.widthPixels;
+        heightScreen = metrics.heightPixels;
+        densityDPI = metrics.densityDpi;
     }
 
 }

@@ -3,6 +3,7 @@
     package="com.phongbm.freephonecall">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:name="com.phongbm.common.GlobalApplication"
@@ -26,13 +27,21 @@
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="com.phongbm.loginsignup.MainFragment"
+            android:name="com.phongbm.home.MainFragment"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="com.phongbm.loginsignup.CountryCodeActivity"
+            android:name="com.phongbm.home.CountryCodeActivity"
             android:label="@string/activity_country_code"
             android:theme="@style/Theme.AppCompat.Light.Dialog" />
+        <activity
+            android:name="com.phongbm.image.ImageActivity"
+            android:label="@string/activity_image"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name="com.phongbm.image.ImageControl"
+            android:label="@string/activity_image"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

@@ -16,6 +16,7 @@
         android:layout_alignParentStart="true"
         android:layout_marginLeft="8dp"
         android:layout_marginStart="18dp"
+        android:textColor="@color/colorPrimary"
         android:textSize="16sp"
         android:textStyle="bold" />
 
@@ -25,6 +26,6 @@
         android:layout_below="@+id/txtCountryCode"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:background="#999999" />
+        android:background="@color/colorPrimary" />
 
 </RelativeLayout>

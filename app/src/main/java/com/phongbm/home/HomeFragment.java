@@ -1,4 +1,4 @@
-package com.phongbm.loginsignup;
+package com.phongbm.home;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -37,10 +37,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_sign_in:
-                ((MainFragment) this.getActivity()).showLoginFragment();
+                ((MainFragment) this.getActivity()).showSignInFragment();
                 break;
             case R.id.btn_sign_up:
-                ((MainFragment) this.getActivity()).showSigupFragment();
+                ((MainFragment) this.getActivity()).showSigUpFragment();
                 break;
         }
     }

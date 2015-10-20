@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
     android:clickable="true"
-    tools:context="com.phongbm.loginsignup.HomeFragment">
+    tools:context="com.phongbm.home.HomeFragment">
 
     <LinearLayout
         android:id="@+id/layout_button"

@@ -32,8 +32,8 @@ public class ImageAdapter extends BaseAdapter {
         for (String i : imageURLs) {
             Log.i(TAG, "uri: " + i);
         }
-        SIZE_IMAGE = (GlobalApplication.WIDTH_SCREEN - CommonMethod.getInstance().
-                convertSizeIcon(GlobalApplication.DENSITY_DPI, 4) * 4) / 3;
+        SIZE_IMAGE = (GlobalApplication.widthScreen - CommonMethod.getInstance().
+                convertSizeIcon(GlobalApplication.densityDPI, 4) * 4) / 3;
     }
 
     private void initializeListImage() {

@@ -28,8 +28,8 @@ import java.io.ByteArrayOutputStream;
 public class ImageControl extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "ImageControl";
     public static final String EXTRA_IMAGE = "EXTRA_IMAGE";
-    private static final int SIZE_IMAGE = GlobalApplication.WIDTH_SCREEN;
-    private static final int HEIGHT_SCREEN = GlobalApplication.HEIGHT_SCREEN;
+    private static final int SIZE_IMAGE = GlobalApplication.widthScreen;
+    private static final int HEIGHT_SCREEN = GlobalApplication.heightScreen;
 
     private String url;
     private int orientation;

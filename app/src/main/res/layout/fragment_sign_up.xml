@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#ffffff"
     android:clickable="true"
-    tools:context="com.phongbm.home.SignInFragment">
+    tools:context="com.phongbm.home.SignUpFragment">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -26,37 +26,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="4"
-            android:background="@color/colorPrimary">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:background="@android:color/transparent"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:layout_width="168dp"
-                        android:layout_height="168dp"
-                        android:layout_centerInParent="true"
-                        android:src="@drawable/image_blank_white" />
-
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:layout_width="160dp"
-                        android:layout_height="160dp"
-                        android:layout_centerInParent="true"
-                        android:src="@drawable/image_sign_in" />
-
-                </RelativeLayout>
-
-            </LinearLayout>
-
-        </RelativeLayout>
+            android:background="@color/colorPrimary"></RelativeLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -139,34 +109,51 @@
                         android:id="@+id/edt_password"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:hint="Password"
                         android:inputType="textPassword"
-                        android:maxLines="1"
                         android:paddingLeft="8dp"
                         android:paddingRight="8dp"
-                        android:singleLine="true"
                         android:textColor="#666666"
                         android:textSize="16sp" />
-
                 </android.support.design.widget.TextInputLayout>
 
-                <TextView
+                <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/edt_confirm_password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:hint="Confirm Password"
+                        android:inputType="textPassword"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:textColor="#666666"
+                        android:textSize="16sp" />
+                </android.support.design.widget.TextInputLayout>
+
+                <CheckBox
+                    android:id="@+id/checkbox_agree"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="end"
-                    android:text="@string/forgot_password"
+                    android:layout_gravity="center_horizontal"
+                    android:gravity="center"
+                    android:text="@string/term_condition"
                     android:textColor="#666666"
-                    android:textSize="16sp"
-                    android:textStyle="normal" />
+                    android:textSize="12sp" />
 
                 <Button
-                    android:id="@+id/btn_sign_in"
+                    android:id="@+id/btn_sign_up"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:background="@drawable/bg_button_round"
                     android:enabled="false"
-                    android:text="@string/sign_in"
+                    android:gravity="center"
+                    android:text="@string/sign_up"
                     android:textColor="#ffffff"
                     android:textStyle="bold" />
 
