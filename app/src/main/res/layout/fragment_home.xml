@@ -110,7 +110,7 @@
                 android:layout_height="216dp"
                 android:layout_centerInParent="true"
                 android:scaleType="centerCrop"
-                android:src="@drawable/image_home_test" />
+                android:src="@drawable/image_home" />
 
         </RelativeLayout>
 

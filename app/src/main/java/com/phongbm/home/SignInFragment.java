@@ -203,8 +203,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
                             parseUser.put("online", true);
                             parseUser.saveInBackground();
                             progressDialog.dismiss();
-                            Snackbar snackbar = Snackbar.make(view, "Logged successfully",
-                                    Snackbar.LENGTH_LONG)
+                            Snackbar snackbar = Snackbar.make(view, "Logged successfully", Snackbar.LENGTH_LONG)
                                     .setAction("ACTION", null)
                                     .setCallback(new Snackbar.Callback() {
                                         @Override
@@ -221,7 +220,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
                             snackbar.show();
                         } else {
                             progressDialog.dismiss();
-                            Snackbar.make(view, "That account does not exist", Snackbar.LENGTH_LONG)
+                            Snackbar.make(view, "There was an error logging in", Snackbar.LENGTH_LONG)
                                     .setAction("ACTION", null)
                                     .show();
                         }
