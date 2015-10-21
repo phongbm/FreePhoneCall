@@ -6,6 +6,7 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.Snackbar;
@@ -17,11 +18,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
+import com.parse.ParseUser;
 import com.phongbm.common.CommonMethod;
 import com.phongbm.common.CommonValue;
 import com.phongbm.freephonecall.MainActivity;
@@ -35,6 +36,7 @@ import java.util.regex.Pattern;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileFragment extends Fragment implements View.OnClickListener {
+    private static final String TAG = ProfileFragment.class.getSimpleName();
     private static final int REQUEST_TAKE_PHOTO = 0;
     private static final int REQUEST_UPLOAD_PHOTO = 1;
     private static final String EMAIL_PATTERN =
@@ -42,17 +44,24 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                     "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
 
     private View view;
-    private EditText edtBirthday, edtFirstName, edtLastName, edtEmail;
+    private EditText edtBirthday;
+    private EditText edtFirstName;
+    private EditText edtLastName;
+    private EditText edtEmail;
     private Button btnOK;
-    private RadioButton radioMale, radioFemale;
-    private boolean isFillFirstName, isFillLastName, isFillEmail;
+    private boolean isFillFirstName;
+    private boolean isFillLastName;
+    private boolean isFillEmail;
+    private boolean gender = true;
+    private RadioGroup radioGroupGender;
     private Pattern pattern;
     private Matcher matcher;
-    private boolean gender = true;
     private Bitmap bitmapAvatar;
     private CircleImageView imgAvatar;
 
-    public ProfileFragment() {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         pattern = Pattern.compile(EMAIL_PATTERN);
     }
 
@@ -70,21 +79,21 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         activity.setSupportActionBar(toolbar);
         if (activity.getSupportActionBar() != null) {
             activity.getSupportActionBar().setTitle("PROFILE INFORMATION");
-            // activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
     }
 
     private void initializeComponent() {
         view.findViewById(R.id.upload_photo).setOnClickListener(this);
         view.findViewById(R.id.take_photo).setOnClickListener(this);
+
         imgAvatar = (CircleImageView) view.findViewById(R.id.img_avatar);
+
         btnOK = (Button) view.findViewById(R.id.btn_ok);
         btnOK.setOnClickListener(this);
+
         edtBirthday = (EditText) view.findViewById(R.id.edt_birthday);
         edtBirthday.setOnClickListener(this);
         edtFirstName = (EditText) view.findViewById(R.id.edt_first_name);
-        edtLastName = (EditText) view.findViewById(R.id.edt_last_name);
-        edtEmail = (EditText) view.findViewById(R.id.edt_email);
         edtFirstName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -92,7 +101,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s != null && s.length() > 1) {
+                if (s.length() > 1) {
                     isFillFirstName = true;
                     ProfileFragment.this.enabledButtonOK();
                 } else {
@@ -105,6 +114,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             public void afterTextChanged(Editable s) {
             }
         });
+
+        edtLastName = (EditText) view.findViewById(R.id.edt_last_name);
         edtLastName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -112,7 +123,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s != null && s.length() > 1) {
+                if (s.length() > 1) {
                     isFillLastName = true;
                     ProfileFragment.this.enabledButtonOK();
                 } else {
@@ -125,6 +136,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             public void afterTextChanged(Editable s) {
             }
         });
+
+        edtEmail = (EditText) view.findViewById(R.id.edt_email);
         edtEmail.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -132,7 +145,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s != null && s.length() > 1) {
+                if (s.length() > 1) {
                     isFillEmail = true;
                     ProfileFragment.this.enabledButtonOK();
                 } else {
@@ -150,25 +163,18 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 }
             }
         });
-        radioMale = (RadioButton) view.findViewById(R.id.radioMale);
-        radioFemale = (RadioButton) view.findViewById(R.id.radioFemale);
-        radioMale.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+        radioGroupGender = (RadioGroup) view.findViewById(R.id.radio_group_gender);
+        radioGroupGender.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    gender = true;
-                } else {
-                    gender = false;
-                }
-            }
-        });
-        radioFemale.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    gender = false;
-                } else {
-                    gender = true;
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.radio_male:
+                        gender = true;
+                        break;
+                    case R.id.radio_female:
+                        gender = false;
+                        break;
                 }
             }
         });
@@ -187,6 +193,20 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 this.showDatePickerDialog();
                 break;
             case R.id.btn_ok:
+                String fullName = edtFirstName.getText().toString().trim() + " "
+                        + edtLastName.getText().toString().trim();
+                String email = edtEmail.getText().toString().trim();
+                String birthday = edtBirthday.getText().toString().trim();
+                boolean gender = this.gender;
+
+                ParseUser currentUser = ParseUser.getCurrentUser();
+                currentUser.put("fullName", fullName);
+                currentUser.setEmail(email);
+                currentUser.put("birthday", birthday);
+                currentUser.put("gender", gender);
+                currentUser.saveInBackground();
+                CommonMethod.uploadAvatar(currentUser, bitmapAvatar);
+
                 Intent intent = new Intent(this.getActivity(), MainActivity.class);
                 this.getActivity().startActivity(intent);
                 this.getActivity().finish();
@@ -199,20 +219,16 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             case R.id.take_photo:
                 Intent intentTakePhoto = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 if (intentTakePhoto.resolveActivity(getActivity().getPackageManager()) != null) {
-                    /*@SuppressLint("SimpleDateFormat")
-                    String date = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-                    String fileName = "AHIHI_" + date;
-                    ContentValues contentValues = new ContentValues();
-                    contentValues.put(MediaStore.Images.Media.TITLE, fileName);
-                    capturedImageURI = getActivity().getContentResolver().insert(
-                            MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
-                    intentTakePhoto.putExtra(MediaStore.EXTRA_OUTPUT, capturedImageURI);*/
                     this.startActivityForResult(intentTakePhoto, REQUEST_TAKE_PHOTO);
                 } else {
                     Snackbar.make(view, "Device does not support camera", Snackbar.LENGTH_LONG)
                             .setAction("ACTION", null)
                             .show();
                 }
+                break;
+            case R.id.default_avatar:
+                imgAvatar.setImageResource(R.drawable.ic_avatar_default);
+                bitmapAvatar = ((BitmapDrawable) imgAvatar.getDrawable()).getBitmap();
                 break;
         }
     }
@@ -221,9 +237,11 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         DatePickerDialog.OnDateSetListener onDateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                edtBirthday.setText((dayOfMonth < 10 ? "0" + dayOfMonth : dayOfMonth) + "/" +
-                        ((monthOfYear + 1) < 10 ? "0" + (monthOfYear + 1) : (monthOfYear + 1)) + "/" +
-                        year);
+                String day = String.valueOf(dayOfMonth < 10 ? "0" + dayOfMonth : dayOfMonth);
+                String month = String.valueOf((monthOfYear + 1) < 10
+                        ? "0" + (monthOfYear + 1) : (monthOfYear + 1));
+                String date = day + "/" + month + "/" + year;
+                edtBirthday.setText(date);
             }
         };
         String date = edtBirthday.getText().toString();
@@ -234,23 +252,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         DatePickerDialog datePickerDialog = new DatePickerDialog(this.getActivity(),
                 onDateSetListener, year, month, day);
         datePickerDialog.show();
-    }
-
-    public String getFullName() {
-        return edtFirstName.getText().toString().trim() + " "
-                + edtLastName.getText().toString().trim();
-    }
-
-    public String getEmail() {
-        return edtEmail.getText().toString();
-    }
-
-    public String getBirthday() {
-        return edtBirthday.getText().toString();
-    }
-
-    public boolean getSex() {
-        return gender;
     }
 
     public boolean validate(final String hex) {

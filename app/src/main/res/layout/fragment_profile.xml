@@ -110,6 +110,7 @@
                 </LinearLayout>
 
                 <TextView
+                    android:id="@+id/default_avatar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
@@ -243,14 +244,14 @@
                         android:textSize="16sp" />
 
                     <RadioGroup
-                        android:id="@+id/radioSex"
+                        android:id="@+id/radio_group_gender"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
                         android:orientation="horizontal">
 
                         <RadioButton
-                            android:id="@+id/radioMale"
+                            android:id="@+id/radio_male"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:checked="true"
@@ -258,7 +259,7 @@
                             android:textColor="#666666" />
 
                         <RadioButton
-                            android:id="@+id/radioFemale"
+                            android:id="@+id/radio_female"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Female"

@@ -47,7 +47,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     private boolean isCheckBoxChecked;
     private String countryCode;
     private String phoneNumber;
-    private String passord;
+    private String password;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -228,10 +228,10 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                     phoneNumber = phoneNumber.substring(1);
                 }
                 phoneNumber = countryCode + " " + phoneNumber;
-                passord = edtPassword.getText().toString().trim();
+                password = edtPassword.getText().toString().trim();
 
                 newUser.setUsername(phoneNumber);
-                newUser.setPassword(passord);
+                newUser.setPassword(password);
                 newUser.signUpInBackground(new SignUpCallback() {
                     @Override
                     public void done(ParseException e) {

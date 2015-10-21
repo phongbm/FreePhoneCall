@@ -93,7 +93,9 @@ public class CommonMethod {
     }
 
     public static void uploadAvatar(ParseUser parseUser, Bitmap avatar) {
-        if (parseUser == null) return;
+        if (parseUser == null) {
+            return;
+        }
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         avatar.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
         byte[] bytes = byteArrayOutputStream.toByteArray();
