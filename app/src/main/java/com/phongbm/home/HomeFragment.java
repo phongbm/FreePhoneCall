@@ -2,7 +2,6 @@ package com.phongbm.home;
 
 import android.app.Fragment;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,14 +14,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private View view;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Log.i(TAG, "onCreate...");
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.i(TAG, "onCreateView...");
         view = inflater.inflate(R.layout.fragment_home, container, false);
         this.initializeComponent();
         return view;
@@ -39,6 +31,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             case R.id.btn_sign_in:
                 ((MainFragment) this.getActivity()).showSignInFragment();
                 break;
+
             case R.id.btn_sign_up:
                 ((MainFragment) this.getActivity()).showSigUpFragment();
                 break;

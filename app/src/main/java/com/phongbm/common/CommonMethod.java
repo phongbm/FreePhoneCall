@@ -10,25 +10,27 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.graphics.drawable.Drawable;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v4.app.NotificationCompat.Builder;
-import android.support.v4.content.ContextCompat;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.style.ImageSpan;
-import android.util.Pair;
 
+import com.parse.GetCallback;
+import com.parse.GetDataCallback;
+import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.phongbm.freephonecall.ActiveFriendItem;
+import com.phongbm.freephonecall.AllFriendItem;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
@@ -77,18 +79,12 @@ public class CommonMethod {
     public String convertTimeToString(int timeCall) {
         int minutes = (int) TimeUnit.MILLISECONDS.toMinutes(timeCall);
         int seconds = (int) TimeUnit.MILLISECONDS.toSeconds(timeCall) - minutes * 60;
-        String time = (minutes < 10 ? "0" + minutes : "" + minutes)
+        return (minutes < 10 ? "0" + minutes : "" + minutes)
                 + ":" + (seconds < 10 ? "0" + seconds : "" + seconds);
-        return time;
     }
 
     public String getCurrentDateTime() {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss", Locale.US);
-        return simpleDateFormat.format(Calendar.getInstance().getTime());
-    }
-
-    public String getMessageDate() {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.US);
         return simpleDateFormat.format(Calendar.getInstance().getTime());
     }
 
@@ -109,16 +105,6 @@ public class CommonMethod {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public SpannableString toSpannableString(Context context, int emoticonId) {
-        SpannableString spannableString = new SpannableString(String.valueOf(emoticonId));
-        Drawable drawable = ContextCompat.getDrawable(context, emoticonId);
-        drawable.setBounds(0, 0, drawable.getIntrinsicWidth() / 2, drawable.getIntrinsicHeight() / 2);
-        ImageSpan imageSpan = new ImageSpan(drawable, ImageSpan.ALIGN_BASELINE);
-        spannableString.setSpan(imageSpan, 0, spannableString.length(),
-                Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-        return spannableString;
     }
 
     public Bitmap decodeSampledBitmapFromResource(String uri, int reqWidth, int reqHeight) {
@@ -144,23 +130,6 @@ public class CommonMethod {
             }
         }
         return inSampleSize * 2;
-    }
-
-    public Pair<Integer, Integer> getStandSizeBitmap(int width, int height,
-                                                     final int WIDTH_IMAGE_MAX,
-                                                     final int HEIGHT_IMAGE_MAX) {
-        if (width < WIDTH_IMAGE_MAX && height < HEIGHT_IMAGE_MAX) {
-            return null;
-        }
-        if (width > WIDTH_IMAGE_MAX) {
-            height = (int) ((float) (WIDTH_IMAGE_MAX) / width * height);
-            width = WIDTH_IMAGE_MAX;
-        }
-        if (height > HEIGHT_IMAGE_MAX) {
-            width = (int) ((float) (HEIGHT_IMAGE_MAX) / height * width);
-            height = HEIGHT_IMAGE_MAX;
-        }
-        return new Pair<>(width, height);
     }
 
     public int getOrientation(String path) {
@@ -198,7 +167,7 @@ public class CommonMethod {
         return bitmap;
     }
 
-    /*public void loadListFriend(ParseUser currentUser, Activity activity) {
+    public void loadListFriend(ParseUser currentUser, Activity activity) {
         final ArrayList<String> listFriendId = (ArrayList<String>) currentUser.get("listFriend");
         if (listFriendId == null || listFriendId.size() == 0) {
             return;
@@ -238,7 +207,7 @@ public class CommonMethod {
                             String fullName = parseUser.getString("fullName");
                             allFriendItems.add(new AllFriendItem(id, avatar, phoneNumber, fullName));
                             Collections.sort(allFriendItems);
-                            if (parseUser.getBoolean("isOnline")) {
+                            if (parseUser.getBoolean("online")) {
                                 activeFriendItems.add(new ActiveFriendItem(id, avatar, phoneNumber, fullName));
                             }
                         }
@@ -246,7 +215,7 @@ public class CommonMethod {
                 }
             });
         }
-    }*/
+    }
 
     public int convertSizeIcon(float density, int sizeDp) {
         return (int) (sizeDp * (density / 160));

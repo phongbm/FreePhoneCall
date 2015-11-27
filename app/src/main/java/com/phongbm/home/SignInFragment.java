@@ -26,6 +26,7 @@ import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.phongbm.common.CommonValue;
+import com.phongbm.countrycode.CountryCodeActivity;
 import com.phongbm.freephonecall.MainActivity;
 import com.phongbm.freephonecall.R;
 
@@ -111,7 +112,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
                 if (s.length() >= MIN_LENGTH_PHONE_NUMBER && s.length() <= MAX_LENGTH_PHONE_NUMBER) {
                     edtPhoneNumber.setError(null);
                     isFillPhoneNumber = true;
-                    SignInFragment.this.enabledButtonSignIn();
+                    enabledButtonSignIn();
                 } else {
                     if (s.length() == 0) {
                         edtPhoneNumber.setError(null);
@@ -139,7 +140,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
                 if (s.length() >= MIN_LENGTH_PASSWORD) {
                     edtPassword.setError(null);
                     isFillPassword = true;
-                    SignInFragment.this.enabledButtonSignIn();
+                    enabledButtonSignIn();
                 } else {
                     if (s.length() == 0) {
                         edtPassword.setError(null);
@@ -209,10 +210,9 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
                                         @Override
                                         public void onDismissed(Snackbar snackbar, int event) {
                                             super.onDismissed(snackbar, event);
-                                            Intent intent = new Intent(SignInFragment.this
-                                                    .getActivity(), MainActivity.class);
-                                            SignInFragment.this.getActivity().startActivity(intent);
-                                            SignInFragment.this.getActivity().finish();
+                                            Intent intent = new Intent(getActivity(), MainActivity.class);
+                                            getActivity().startActivity(intent);
+                                            getActivity().finish();
                                         }
                                     });
                             View snackBarView = snackbar.getView();

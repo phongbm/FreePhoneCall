@@ -6,11 +6,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 
 import com.parse.ParseUser;
+import com.phongbm.common.Profile;
 import com.phongbm.home.MainFragment;
 
 public class SplashActivity extends AppCompatActivity {
@@ -21,26 +21,28 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_splash);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window statusBar = this.getWindow();
             statusBar.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             statusBar.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             statusBar.setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
         }
+
+        final ParseUser currentUser = ParseUser.getCurrentUser();
+        if (currentUser != null) {
+            Profile.getInstance().getData(this);
+            currentUser.put("online", true);
+            currentUser.saveInBackground();
+        }
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                ParseUser currentUser = ParseUser.getCurrentUser();
                 if (currentUser != null) {
-                    Log.i(TAG, "ParseUser NOT NULL");
-                    currentUser.put("online", true);
-                    currentUser.saveInBackground();
-                    Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-                    SplashActivity.this.startActivity(intent);
+                    SplashActivity.this.startActivity(new Intent(SplashActivity.this, MainActivity.class));
                 } else {
-                    Log.i(TAG, "ParseUser NULL");
-                    Intent intent = new Intent(SplashActivity.this, MainFragment.class);
-                    SplashActivity.this.startActivity(intent);
+                    SplashActivity.this.startActivity(new Intent(SplashActivity.this, MainFragment.class));
                 }
                 SplashActivity.this.finish();
             }

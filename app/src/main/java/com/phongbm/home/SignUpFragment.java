@@ -6,12 +6,12 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,6 +25,8 @@ import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 import com.phongbm.common.CommonValue;
+import com.phongbm.common.Profile;
+import com.phongbm.countrycode.CountryCodeActivity;
 import com.phongbm.freephonecall.R;
 
 public class SignUpFragment extends Fragment implements View.OnClickListener {
@@ -47,12 +49,10 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     private boolean isCheckBoxChecked;
     private String countryCode;
     private String phoneNumber;
-    private String password;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i(TAG, "onCreate...");
         this.setHasOptionsMenu(true);
     }
 
@@ -84,7 +84,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (checkBoxAgree.isChecked()) {
                     isCheckBoxChecked = true;
-                    SignUpFragment.this.enabledButtonSignUp();
+                    enabledButtonSignUp();
                 } else {
                     isCheckBoxChecked = false;
                     btnSignUp.setEnabled(false);
@@ -108,7 +108,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                 if (s.length() >= MIN_LENGTH_PHONE_NUMBER && s.length() <= MAX_LENGTH_PHONE_NUMBER) {
                     edtPhoneNumber.setError(null);
                     isFillPhoneNumber = true;
-                    SignUpFragment.this.enabledButtonSignUp();
+                    enabledButtonSignUp();
                 } else {
                     if (s.length() == 0) {
                         edtPhoneNumber.setError(null);
@@ -152,7 +152,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                     } else {
                         isFillPassword = true;
                         isFillConfirmPassword = true;
-                        SignUpFragment.this.enabledButtonSignUp();
+                        enabledButtonSignUp();
                         edtPassword.setError(null);
                         edtConfirmPassword.setError(null);
                     }
@@ -182,7 +182,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                     } else {
                         isFillConfirmPassword = true;
                         isFillPassword = true;
-                        SignUpFragment.this.enabledButtonSignUp();
+                        enabledButtonSignUp();
                         edtConfirmPassword.setError(null);
                         edtPassword.setError(null);
                     }
@@ -215,6 +215,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                 Intent intent = new Intent(this.getActivity(), CountryCodeActivity.class);
                 this.startActivityForResult(intent, REQUEST_COUNTRY_CODE);
                 break;
+
             case R.id.btn_sign_up:
                 final ProgressDialog progressDialog = new ProgressDialog(this.getActivity());
                 progressDialog.setTitle("Signing up");
@@ -228,7 +229,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                     phoneNumber = phoneNumber.substring(1);
                 }
                 phoneNumber = countryCode + " " + phoneNumber;
-                password = edtPassword.getText().toString().trim();
+                String password = edtPassword.getText().toString().trim();
 
                 newUser.setUsername(phoneNumber);
                 newUser.setPassword(password);
@@ -239,21 +240,27 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                             newUser.put("online", true);
                             newUser.saveInBackground();
                             progressDialog.dismiss();
+
+                            new Handler().post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Profile.getInstance().setPhoneNumber(phoneNumber);
+                                }
+                            });
+
                             Snackbar snackbar = Snackbar.make(view, "Registered successfully",
-                                    Snackbar.LENGTH_LONG)
+                                    Snackbar.LENGTH_SHORT)
                                     .setAction("ACTION", null)
                                     .setCallback(new Snackbar.Callback() {
                                         @Override
                                         public void onDismissed(Snackbar snackbar, int event) {
-                                            super.onDismissed(snackbar, event);
-                                            ((MainFragment) SignUpFragment.this.getActivity())
-                                                    .showProfileFragment();
+                                            ((MainFragment) SignUpFragment.this.getActivity()).showProfileFragment();
                                         }
                                     });
-                            View snackBarView = snackbar.getView();
-                            snackBarView.setBackgroundColor(Color.parseColor("#4caf50"));
+                            snackbar.getView().setBackgroundColor(Color.parseColor("#4caf50"));
                             snackbar.show();
                         } else {
+                            e.printStackTrace();
                             progressDialog.dismiss();
                             Snackbar.make(view, "There was an error signing up", Snackbar.LENGTH_LONG)
                                     .setAction("ACTION", null)

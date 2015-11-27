@@ -14,7 +14,7 @@ import android.widget.GridView;
 import com.phongbm.freephonecall.R;
 
 public class ImageActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
-    private static final String TAG = "ImageActivity";
+    private static final String TAG = ImageActivity.class.getSimpleName();
     private static final int REQUEST_CROP_AVATAR = 0;
 
     private GridView gridViewImage;

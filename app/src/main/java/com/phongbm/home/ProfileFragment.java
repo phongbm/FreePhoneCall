@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -25,15 +26,15 @@ import android.widget.RadioGroup;
 import com.parse.ParseUser;
 import com.phongbm.common.CommonMethod;
 import com.phongbm.common.CommonValue;
+import com.phongbm.common.Profile;
 import com.phongbm.freephonecall.MainActivity;
 import com.phongbm.freephonecall.R;
 import com.phongbm.image.ImageActivity;
 import com.phongbm.image.ImageControl;
+import com.phongbm.libraries.CircleImageView;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = ProfileFragment.class.getSimpleName();
@@ -53,10 +54,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     private boolean isFillLastName;
     private boolean isFillEmail;
     private boolean gender = true;
-    private RadioGroup radioGroupGender;
     private Pattern pattern;
-    private Matcher matcher;
-    private Bitmap bitmapAvatar;
+    private Bitmap avatarBitmap;
     private CircleImageView imgAvatar;
 
     @Override
@@ -85,8 +84,10 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     private void initializeComponent() {
         view.findViewById(R.id.upload_photo).setOnClickListener(this);
         view.findViewById(R.id.take_photo).setOnClickListener(this);
+        view.findViewById(R.id.default_avatar).setOnClickListener(this);
 
         imgAvatar = (CircleImageView) view.findViewById(R.id.img_avatar);
+        avatarBitmap = ((BitmapDrawable) imgAvatar.getDrawable()).getBitmap();
 
         btnOK = (Button) view.findViewById(R.id.btn_ok);
         btnOK.setOnClickListener(this);
@@ -103,7 +104,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() > 1) {
                     isFillFirstName = true;
-                    ProfileFragment.this.enabledButtonOK();
+                    enabledButtonOK();
                 } else {
                     isFillFirstName = false;
                     btnOK.setEnabled(false);
@@ -125,7 +126,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() > 1) {
                     isFillLastName = true;
-                    ProfileFragment.this.enabledButtonOK();
+                    enabledButtonOK();
                 } else {
                     isFillLastName = false;
                     btnOK.setEnabled(false);
@@ -147,7 +148,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() > 1) {
                     isFillEmail = true;
-                    ProfileFragment.this.enabledButtonOK();
+                    enabledButtonOK();
                 } else {
                     isFillEmail = false;
                     btnOK.setEnabled(false);
@@ -164,7 +165,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             }
         });
 
-        radioGroupGender = (RadioGroup) view.findViewById(R.id.radio_group_gender);
+        RadioGroup radioGroupGender = (RadioGroup) view.findViewById(R.id.radio_group_gender);
         radioGroupGender.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -192,10 +193,11 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             case R.id.edt_birthday:
                 this.showDatePickerDialog();
                 break;
+
             case R.id.btn_ok:
-                String fullName = edtFirstName.getText().toString().trim() + " "
+                final String fullName = edtFirstName.getText().toString().trim() + " "
                         + edtLastName.getText().toString().trim();
-                String email = edtEmail.getText().toString().trim();
+                final String email = edtEmail.getText().toString().trim();
                 String birthday = edtBirthday.getText().toString().trim();
                 boolean gender = this.gender;
 
@@ -205,17 +207,27 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 currentUser.put("birthday", birthday);
                 currentUser.put("gender", gender);
                 currentUser.saveInBackground();
-                CommonMethod.uploadAvatar(currentUser, bitmapAvatar);
+                CommonMethod.uploadAvatar(currentUser, avatarBitmap);
 
-                Intent intent = new Intent(this.getActivity(), MainActivity.class);
-                this.getActivity().startActivity(intent);
+                new Handler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Profile.getInstance().setFullName(fullName);
+                        Profile.getInstance().setEmail(email);
+                        Profile.getInstance().setAvatar(avatarBitmap);
+                    }
+                });
+
+                this.getActivity().startActivity(new Intent(this.getActivity(), MainActivity.class));
                 this.getActivity().finish();
                 break;
+
             case R.id.upload_photo:
                 Intent intentUpload = new Intent();
                 intentUpload.setClass(this.getActivity(), ImageActivity.class);
                 this.startActivityForResult(intentUpload, REQUEST_UPLOAD_PHOTO);
                 break;
+
             case R.id.take_photo:
                 Intent intentTakePhoto = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 if (intentTakePhoto.resolveActivity(getActivity().getPackageManager()) != null) {
@@ -226,9 +238,10 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                             .show();
                 }
                 break;
+
             case R.id.default_avatar:
                 imgAvatar.setImageResource(R.drawable.ic_avatar_default);
-                bitmapAvatar = ((BitmapDrawable) imgAvatar.getDrawable()).getBitmap();
+                avatarBitmap = ((BitmapDrawable) imgAvatar.getDrawable()).getBitmap();
                 break;
         }
     }
@@ -255,7 +268,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     }
 
     public boolean validate(final String hex) {
-        matcher = pattern.matcher(hex);
+        Matcher matcher = pattern.matcher(hex);
         return matcher.matches();
     }
 
@@ -265,14 +278,15 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             switch (requestCode) {
                 case REQUEST_UPLOAD_PHOTO:
                     byte[] bytes = data.getByteArrayExtra(CommonValue.BYTE_AVATAR);
-                    bitmapAvatar = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                    imgAvatar.setImageBitmap(bitmapAvatar);
+                    avatarBitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                    imgAvatar.setImageBitmap(avatarBitmap);
                     break;
+
                 case REQUEST_TAKE_PHOTO:
-                    String capturedImageFilePath = CommonMethod.getInstance().getPathFromUri(getActivity()
-                            .getBaseContext(), data.getData());
+                    String capturedImageFilePath = CommonMethod.getInstance().getPathFromUri(
+                            this.getActivity().getBaseContext(), data.getData());
                     Intent intentCropImage = new Intent();
-                    intentCropImage.setClass(getActivity(), ImageControl.class);
+                    intentCropImage.setClass(this.getActivity(), ImageControl.class);
                     intentCropImage.putExtra(ImageControl.EXTRA_IMAGE, capturedImageFilePath);
                     this.startActivityForResult(intentCropImage, REQUEST_UPLOAD_PHOTO);
                     break;

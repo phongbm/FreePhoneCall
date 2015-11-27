@@ -1,11 +1,13 @@
 package com.phongbm.home;
 
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 import android.view.WindowManager;
+
+import com.phongbm.freephonecall.R;
 
 public class MainFragment extends AppCompatActivity {
     private HomeFragment homeFragment = new HomeFragment();
@@ -16,33 +18,31 @@ public class MainFragment extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window statusBar = this.getWindow();
             statusBar.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             statusBar.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            statusBar.setStatusBarColor(Color.parseColor("#1976d2"));
+            statusBar.setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
         }
+
         this.showHomeFragment();
     }
 
     public void showHomeFragment() {
-        this.getFragmentManager().beginTransaction()
-                .replace(android.R.id.content, homeFragment).commit();
+        this.getFragmentManager().beginTransaction().replace(android.R.id.content, homeFragment).commit();
     }
 
     public void showSignInFragment() {
-        this.getFragmentManager().beginTransaction()
-                .replace(android.R.id.content, signInFragment).commit();
+        this.getFragmentManager().beginTransaction().replace(android.R.id.content, signInFragment).commit();
     }
 
     public void showSigUpFragment() {
-        this.getFragmentManager().beginTransaction()
-                .replace(android.R.id.content, signUpFragment).commit();
+        this.getFragmentManager().beginTransaction().replace(android.R.id.content, signUpFragment).commit();
     }
 
     public void showProfileFragment() {
-        this.getFragmentManager().beginTransaction()
-                .replace(android.R.id.content, profileFragment).commit();
+        this.getFragmentManager().beginTransaction().replace(android.R.id.content, profileFragment).commit();
     }
 
     @Override
@@ -54,6 +54,10 @@ public class MainFragment extends AppCompatActivity {
                 super.onBackPressed();
             }
         }
+    }
+
+    public boolean isProfileFragmentShow() {
+        return profileFragment.isVisible();
     }
 
 }

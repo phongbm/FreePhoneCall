@@ -2,46 +2,59 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.phongbm.freephonecall">
 
+    <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
         android:name="com.phongbm.common.GlobalApplication"
         android:allowBackup="true"
         android:fullBackupContent="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/icon_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity
-            android:name="com.phongbm.freephonecall.SplashActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+        android:theme="@style/AppTheme.NoActionBar">
+        <activity android:name="com.phongbm.freephonecall.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name="com.phongbm.freephonecall.MainActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:label="@string/app_name" />
+
+        <activity android:name="com.phongbm.home.MainFragment" />
+
         <activity
-            android:name="com.phongbm.home.MainFragment"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name="com.phongbm.home.CountryCodeActivity"
+            android:name="com.phongbm.countrycode.CountryCodeActivity"
             android:label="@string/activity_country_code"
             android:theme="@style/Theme.AppCompat.Light.Dialog" />
+
         <activity
             android:name="com.phongbm.image.ImageActivity"
-            android:label="@string/activity_image"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:label="@string/activity_image" />
+
         <activity
             android:name="com.phongbm.image.ImageControl"
-            android:label="@string/activity_image"
-            android:theme="@style/AppTheme.NoActionBar" />
-    </application>
+            android:label="@string/activity_image" />
 
+        <activity
+            android:name="com.phongbm.freephonecall.AdditionFriend"
+            android:theme="@style/AppTheme.Dialog" />
+
+        <activity android:name="com.phongbm.freephonecall.OutGoingCallActivity" />
+
+        <activity android:name="com.phongbm.freephonecall.InComingCallActivity" />
+
+        <service
+            android:name="com.phongbm.freephonecall.FreePhoneCallService"
+            android:enabled="true"
+            android:exported="false" />
+    </application>
 </manifest>
