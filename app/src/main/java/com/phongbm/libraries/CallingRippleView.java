@@ -78,7 +78,7 @@ public class CallingRippleView extends View {
         colorBase = COLOR / PAINTER_COUNT;
         initializePainter();
         currSpeed = SPEED_FAST;
-        minRadius = (int) (getResources().getDimensionPixelSize(R.dimen.chat_panel_avatar_size) / 2);
+        minRadius = (int) (getResources().getDimensionPixelSize(R.dimen.rv_panel) / 2);
         maxRadius = getWidth() < getHeight() ? getWidth() / 2 : getHeight() / 2;
         currRadius = new int[LINE_COUNT];
         for (int i = 0; i < currRadius.length; ++i) {

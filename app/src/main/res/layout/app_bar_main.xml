@@ -32,50 +32,50 @@
 
     <include layout="@layout/content_main" />
 
-    <com.phongbm.libraries.FadingBackgroundView
-        android:id="@+id/fading_background"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
 
-    <com.phongbm.libraries.FloatingActionMenu
-        android:id="@+id/floating_action_menu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="4dp"
-        fab:fab_labelStyle="@style/fab_labels_style">
+        <com.phongbm.libraries.floatingactionmenu.FloatingActionMenu
+            android:id="@+id/menu"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:padding="16dp"
+            fab:menu_backgroundColor="#ccffffff"
+            fab:menu_colorNormal="@color/colorPrimary"
+            fab:menu_colorPressed="@color/colorPrimaryDark"
+            fab:menu_colorRipple="#64b5f6"
+            fab:menu_fab_size="normal"
+            fab:menu_icon="@drawable/ic_plus"
+            fab:menu_labels_ellipsize="end"
+            fab:menu_labels_position="left"
+            fab:menu_labels_singleLine="true"
+            fab:menu_shadowColor="#444">
 
-        <com.phongbm.libraries.FloatingActionButton
-            android:id="@+id/btn_new_voice_call"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            fab:fab_colorNormal="#ff5722"
-            fab:fab_colorPressed="#f4511e"
-            fab:fab_labelText="NEW VOICE CALL"
-            fab:fab_normal_icon="@drawable/ic_voice_call_18dp"
-            fab:fab_type="mini" />
+            <com.phongbm.libraries.floatingactionmenu.FloatingActionButton
+                android:id="@+id/btn_add_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_plus"
+                fab:fab_colorNormal="#f44336"
+                fab:fab_colorPressed="#d32f2f"
+                fab:fab_colorRipple="#e57373"
+                fab:fab_label="Voice Call"
+                fab:fab_size="mini" />
 
-        <com.phongbm.libraries.FloatingActionButton
-            android:id="@+id/btn_add_friend"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            fab:fab_colorNormal="#4caf50"
-            fab:fab_colorPressed="#43a047"
-            fab:fab_labelText="ADDING A FRIEND"
-            fab:fab_normal_icon="@drawable/ic_add_friend_18dp"
-            fab:fab_type="mini" />
-
-        <com.phongbm.libraries.FloatingActionToggleButton
-            android:id="@+id/floating_action_toggle_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            fab:fab_colorNormal="#2196f3"
-            fab:fab_colorPressed="#1e88e5"
-            fab:fab_labelText="CLOSE TOGGLE MENU"
-            fab:fab_normal_icon="@drawable/ic_add_white_24dp"
-            fab:fab_toggle_icon="@drawable/ic_delete_24dp" />
-    </com.phongbm.libraries.FloatingActionMenu>
+            <com.phongbm.libraries.floatingactionmenu.FloatingActionButton
+                android:id="@+id/btn_add_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_plus"
+                fab:fab_colorNormal="#4caf50"
+                fab:fab_colorPressed="#388e3c"
+                fab:fab_colorRipple="#81c784"
+                fab:fab_label="Friend"
+                fab:fab_size="mini" />
+        </com.phongbm.libraries.floatingactionmenu.FloatingActionMenu>
+    </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>

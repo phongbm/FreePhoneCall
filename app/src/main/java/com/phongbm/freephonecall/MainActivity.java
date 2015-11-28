@@ -32,11 +32,7 @@ import com.phongbm.common.CommonMethod;
 import com.phongbm.common.CommonValue;
 import com.phongbm.common.Profile;
 import com.phongbm.libraries.CircleImageView;
-import com.phongbm.libraries.FadingBackgroundView;
-import com.phongbm.libraries.FloatingActionButton;
-import com.phongbm.libraries.FloatingActionMenu;
-import com.phongbm.libraries.FloatingActionToggleButton;
-import com.phongbm.libraries.OnFloatingActionMenuSelectedListener;
+import com.phongbm.libraries.floatingactionmenu.FloatingActionMenu;
 
 import java.util.ArrayList;
 
@@ -50,6 +46,7 @@ public class MainActivity extends AppCompatActivity
     private CoordinatorLayout coordinatorLayout;
     private DrawerLayout drawer;
     private NavigationView navigationView;
+    private FloatingActionMenu menu;
     private ViewPagerAdapter viewPagerAdapter;
     private ViewPager viewPager;
     private TabLayout tab;
@@ -122,26 +119,14 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void initializeFloatingActionMenu() {
-        FadingBackgroundView fbv = (FadingBackgroundView) this.findViewById(R.id.fading_background);
-        final FloatingActionToggleButton fatb = (FloatingActionToggleButton)
-                this.findViewById(R.id.floating_action_toggle_button);
-        FloatingActionMenu fam = (FloatingActionMenu) this.findViewById(R.id.floating_action_menu);
-        fam.setFadingBackgroundView(fbv);
-        fam.setOnFloatingActionMenuSelectedListener(new OnFloatingActionMenuSelectedListener() {
+        menu = (FloatingActionMenu) this.findViewById(R.id.menu);
+        menu.setOnMenuButtonClickListener(new View.OnClickListener() {
             @Override
-            public void onFloatingActionMenuSelected(FloatingActionButton fab) {
-                switch (fab.getId()) {
-                    case R.id.btn_add_friend:
-                        fatb.toggleOff();
-                        Intent addFriendIntent = new Intent(MainActivity.this, AdditionFriend.class);
-                        MainActivity.this.startActivityForResult(addFriendIntent, REQUEST_ADDITION_FRIEND);
-                        break;
-
-                    case R.id.btn_new_voice_call:
-                        break;
-                }
+            public void onClick(View view) {
+                menu.toggle(true);
             }
         });
+        menu.setClosedOnTouchOutside(true);
     }
 
     @Override

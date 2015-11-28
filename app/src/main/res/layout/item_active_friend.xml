@@ -32,7 +32,7 @@
             android:contentDescription="@null"
             android:padding="1dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_add_white_18dp" />
+            android:src="@drawable/ic_plus" />
 
         <TextView
             android:id="@+id/txtName"

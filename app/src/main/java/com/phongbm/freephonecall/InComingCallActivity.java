@@ -84,7 +84,7 @@ public class InComingCallActivity extends AppCompatActivity implements View.OnCl
         callLogsDBManager = new CallLogsDBManager(this);*/
         commonMethod = CommonMethod.getInstance();
         commonMethod.pushNotification(this, MainActivity.class, "Calling...",
-                NOTIFICATION_CALLING, R.drawable.ic_notification_calling, true);
+                NOTIFICATION_CALLING, R.drawable.ic_plus, true);
     }
 
     private void initializeComponent() {
