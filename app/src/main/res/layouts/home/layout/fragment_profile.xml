@@ -265,7 +265,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:background="@drawable/bg_button_round"
+                    android:background="@drawable/button_blue"
                     android:enabled="false"
                     android:text="SAVE AND CONTINUE"
                     android:textColor="#ffffff"

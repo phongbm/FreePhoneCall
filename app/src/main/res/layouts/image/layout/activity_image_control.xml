@@ -59,7 +59,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
                 android:layout_marginStart="4dp"
-                android:background="@drawable/bg_button_round"
+                android:background="@drawable/button_blue"
                 android:text="Crop"
                 android:textColor="#ffffff" />
 
@@ -71,7 +71,7 @@
                 android:layout_marginStart="4dp"
                 android:layout_toEndOf="@+id/btnCrop"
                 android:layout_toRightOf="@+id/btnCrop"
-                android:background="@drawable/bg_button_round"
+                android:background="@drawable/button_blue"
                 android:text="Rotate"
                 android:textColor="#ffffff" />
 
@@ -83,7 +83,7 @@
                 android:layout_marginStart="4dp"
                 android:layout_toEndOf="@+id/btnRotate"
                 android:layout_toRightOf="@+id/btnRotate"
-                android:background="@drawable/bg_button_round"
+                android:background="@drawable/button_blue"
                 android:text="Cancel"
                 android:textColor="#ffffff" />
         </RelativeLayout>

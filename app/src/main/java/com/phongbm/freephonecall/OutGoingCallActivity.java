@@ -36,17 +36,17 @@ public class OutGoingCallActivity extends AppCompatActivity implements View.OnCl
     private static final int UPDATE_TIME_CALL = 1000;
     private static final int NOTIFICATION_CALLING = 0;
 
-    private ImageView btnEndCall, btnRingtone;
-    private TextView txtTime, txtFullName, txtPhoneNumber;
+    private ImageView btnEndCall;
+    private TextView txtTime;
+    private TextView txtFullName;
+    private TextView txtPhoneNumber;
     private CircleImageView imgAvatar;
     private CallingRippleView callingRipple;
     private BroadcastOutgoingCall broadcastOutgoingCall;
     private int timeCall = 0;
     private String id, time, fullName, phoneNumber, date = null;
     private boolean isCalling = false, isPressBtnEndCall = false;
-    private Thread threadTimeCall;
-    private CommonMethod commonMethod;
-    // private CallLogsDBManager callLogsDBManager;
+
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -67,22 +67,21 @@ public class OutGoingCallActivity extends AppCompatActivity implements View.OnCl
         Intent intent = new Intent(CommonValue.ACTION_OUTGOING_CALL);
         intent.putExtra(CommonValue.INCOMING_CALL_ID, id);
         this.sendBroadcast(intent);
-        // callLogsDBManager = new CallLogsDBManager(this);
-        commonMethod = CommonMethod.getInstance();
-        commonMethod.pushNotification(this, MainActivity.class, "Calling...",
+        CommonMethod.getInstance().pushNotification(this, MainActivity.class, "Calling...",
                 NOTIFICATION_CALLING, R.drawable.ic_plus, true);
     }
 
     private void initializeComponent() {
-        btnEndCall = (ImageView) findViewById(R.id.btnEndCall);
+        btnEndCall = (ImageView) findViewById(R.id.btn_end_call);
         btnEndCall.setOnClickListener(this);
-        btnRingtone = (ImageView) findViewById(R.id.btnRingtone);
-        btnRingtone.setOnClickListener(this);
-        txtTime = (TextView) findViewById(R.id.txtTime);
-        txtFullName = (TextView) findViewById(R.id.txtFullName);
-        txtPhoneNumber = (TextView) findViewById(R.id.txtPhoneNumber);
-        imgAvatar = (CircleImageView) findViewById(R.id.imgAvatar);
-        callingRipple = (CallingRippleView) findViewById(R.id.callingRipple);
+
+        this.findViewById(R.id.btn_ring_tone).setOnClickListener(this);
+
+        txtTime = (TextView) findViewById(R.id.txt_time);
+        txtFullName = (TextView) findViewById(R.id.txt_full_name);
+        txtPhoneNumber = (TextView) findViewById(R.id.txt_phone_number);
+        imgAvatar = (CircleImageView) findViewById(R.id.img_avatar);
+        callingRipple = (CallingRippleView) findViewById(R.id.calling_ripple);
 
         Intent intent = this.getIntent();
         id = intent.getStringExtra(CommonValue.INCOMING_CALL_ID);
@@ -121,13 +120,14 @@ public class OutGoingCallActivity extends AppCompatActivity implements View.OnCl
         switch (view.getId()) {
             case R.id.btnEndCall:
                 isCalling = false;
-                date = commonMethod.getCurrentDateTime();
+                date = CommonMethod.getInstance().getCurrentDateTime();
                 isPressBtnEndCall = true;
                 btnEndCall.setEnabled(false);
                 Intent intentEndCall = new Intent(CommonValue.ACTION_END_CALL);
                 this.sendBroadcast(intentEndCall);
                 break;
-            case R.id.btnRingtone:
+
+            case R.id.btn_ring_tone:
                 AudioManager audioManager = (AudioManager) this
                         .getSystemService(Context.AUDIO_SERVICE);
                 audioManager.adjustStreamVolume(AudioManager.STREAM_RING,
@@ -152,15 +152,17 @@ public class OutGoingCallActivity extends AppCompatActivity implements View.OnCl
             switch (intent.getAction()) {
                 case CommonValue.STATE_PICK_UP:
                     isCalling = true;
-                    threadTimeCall = new Thread(runnableTimeCall);
+                    Thread threadTimeCall = new Thread(runnableTimeCall);
                     threadTimeCall.start();
                     OutGoingCallActivity.this.setVolumeControlStream(
                             AudioManager.STREAM_VOICE_CALL);
                     break;
+
                 case CommonValue.STATE_END_CALL:
                     if (timeCall != 0) {
                         isCalling = false;
-                        txtTime.setText("End Call: " + time);
+                        String endCall = "End Call: " + time;
+                        txtTime.setText(endCall);
                     } else {
                         if (isPressBtnEndCall) {
                             txtTime.setText("Call Ended");
@@ -169,7 +171,7 @@ public class OutGoingCallActivity extends AppCompatActivity implements View.OnCl
                         }
                     }
                     if (date == null) {
-                        date = commonMethod.getCurrentDateTime();
+                        date = CommonMethod.getInstance().getCurrentDateTime();
                     }
                     btnEndCall.setEnabled(false);
                     txtTime.setBackgroundColor(ContextCompat.getColor(OutGoingCallActivity.this, R.color.red_500));
@@ -183,7 +185,6 @@ public class OutGoingCallActivity extends AppCompatActivity implements View.OnCl
                     contentValues.put("phoneNumber", phoneNumber);
                     contentValues.put("date", date);
                     contentValues.put("state", "outGoingCall");
-                    // callLogsDBManager.insertData(contentValues);
 
                     (new Handler()).postDelayed(new Runnable() {
                         @Override
@@ -201,7 +202,7 @@ public class OutGoingCallActivity extends AppCompatActivity implements View.OnCl
         public void run() {
             while (isCalling) {
                 timeCall += 1000;
-                time = commonMethod.convertTimeToString(timeCall);
+                time = CommonMethod.getInstance().convertTimeToString(timeCall);
                 handler.sendEmptyMessage(UPDATE_TIME_CALL);
                 SystemClock.sleep(1000);
             }
@@ -211,7 +212,6 @@ public class OutGoingCallActivity extends AppCompatActivity implements View.OnCl
     @Override
     protected void onDestroy() {
         this.unregisterReceiver(broadcastOutgoingCall);
-        // callLogsDBManager.closeDatabase();
         ((NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE))
                 .cancel(NOTIFICATION_CALLING);
         super.onDestroy();

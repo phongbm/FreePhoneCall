@@ -15,36 +15,39 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v4.app.NotificationCompat.Builder;
 
-import com.parse.GetCallback;
-import com.parse.GetDataCallback;
-import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
-import com.phongbm.freephonecall.ActiveFriendItem;
-import com.phongbm.freephonecall.AllFriendItem;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
-public class CommonMethod {
-    private static CommonMethod commonMethod;
+public class CommonMethod implements Cloneable, Serializable {
 
-    public static CommonMethod getInstance() {
-        if (commonMethod == null) {
-            commonMethod = new CommonMethod();
-        }
-        return commonMethod;
+    private static class LazyInit {
+        private static final CommonMethod INSTANCE = new CommonMethod();
     }
 
-    public CommonMethod() {
+    public static CommonMethod getInstance() {
+        return LazyInit.INSTANCE;
+    }
+
+    @SuppressWarnings("CloneDoesntCallSuperClone")
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return new CloneNotSupportedException();
+    }
+
+    protected Object readResolve() {
+        return Profile.getInstance();
+    }
+
+    private CommonMethod() {
     }
 
     public void pushNotification(Activity srcActivity, Class destActivity, String content,
@@ -165,56 +168,6 @@ public class CommonMethod {
         bitmap = Bitmap.createBitmap(bitmap, 0, 0,
                 bitmap.getWidth(), bitmap.getHeight(), matrix, true);
         return bitmap;
-    }
-
-    public void loadListFriend(ParseUser currentUser, Activity activity) {
-        final ArrayList<String> listFriendId = (ArrayList<String>) currentUser.get("listFriend");
-        if (listFriendId == null || listFriendId.size() == 0) {
-            return;
-        }
-        final ArrayList<AllFriendItem> allFriendItems = ((GlobalApplication)
-                activity.getApplication()).getAllFriendItems();
-        if (allFriendItems != null) {
-            allFriendItems.clear();
-        }
-        final ArrayList<ActiveFriendItem> activeFriendItems = ((GlobalApplication)
-                activity.getApplication()).getActiveFriendItems();
-        if (activeFriendItems != null) {
-            activeFriendItems.clear();
-        }
-        for (int i = 0; i < listFriendId.size(); i++) {
-            ParseQuery<ParseUser> parseQuery = ParseUser.getQuery();
-            parseQuery.getInBackground(listFriendId.get(i), new GetCallback<ParseUser>() {
-                @Override
-                public void done(final ParseUser parseUser, ParseException e) {
-                    if (e != null) {
-                        e.printStackTrace();
-                        return;
-                    }
-                    ParseFile parseFile = (ParseFile) parseUser.get("avatar");
-                    if (parseFile == null) {
-                        return;
-                    }
-                    parseFile.getDataInBackground(new GetDataCallback() {
-                        @Override
-                        public void done(byte[] bytes, ParseException e) {
-                            if (e != null) {
-                                return;
-                            }
-                            Bitmap avatar = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                            String id = parseUser.getObjectId();
-                            String phoneNumber = parseUser.getUsername();
-                            String fullName = parseUser.getString("fullName");
-                            allFriendItems.add(new AllFriendItem(id, avatar, phoneNumber, fullName));
-                            Collections.sort(allFriendItems);
-                            if (parseUser.getBoolean("online")) {
-                                activeFriendItems.add(new ActiveFriendItem(id, avatar, phoneNumber, fullName));
-                            }
-                        }
-                    });
-                }
-            });
-        }
     }
 
     public int convertSizeIcon(float density, int sizeDp) {

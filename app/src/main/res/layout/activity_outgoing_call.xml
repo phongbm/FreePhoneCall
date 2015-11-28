@@ -25,7 +25,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/txtTime"
+                    android:id="@+id/txt_time"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingLeft="16dp"
@@ -36,7 +36,7 @@
                     android:textStyle="normal" />
 
                 <TextView
-                    android:id="@+id/txtFullName"
+                    android:id="@+id/txt_full_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
@@ -46,7 +46,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/txtPhoneNumber"
+                    android:id="@+id/txt_phone_number"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
@@ -54,9 +54,7 @@
                     android:textColor="#ffffff"
                     android:textSize="20sp"
                     android:textStyle="normal" />
-
             </LinearLayout>
-
         </RelativeLayout>
 
         <LinearLayout
@@ -71,19 +69,18 @@
                 android:layout_weight="6">
 
                 <com.phongbm.libraries.CallingRippleView
-                    android:id="@+id/callingRipple"
+                    android:id="@+id/calling_ripple"
                     android:layout_width="match_parent"
                     android:layout_height="240dp"
                     android:layout_centerInParent="true" />
 
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/imgAvatar"
+                <com.phongbm.libraries.CircleImageView
+                    android:id="@+id/img_avatar"
                     android:layout_width="128dp"
                     android:layout_height="128dp"
                     android:layout_centerInParent="true"
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_avatar_default" />
-
             </RelativeLayout>
 
             <RelativeLayout
@@ -104,7 +101,7 @@
                         android:orientation="horizontal">
 
                         <ImageView
-                            android:id="@+id/btnRingtone"
+                            android:id="@+id/btn_ring_tone"
                             android:layout_width="42dp"
                             android:layout_height="42dp"
                             android:background="@drawable/bg_call_circle"
@@ -135,7 +132,6 @@
                             android:padding="8dp"
                             android:scaleType="centerCrop"
                             android:src="@drawable/ic_call_map" />
-
                     </LinearLayout>
 
                     <LinearLayout
@@ -145,22 +141,16 @@
                         android:orientation="horizontal">
 
                         <ImageView
-                            android:id="@+id/btnEndCall"
+                            android:id="@+id/btn_end_call"
                             android:layout_width="256dp"
                             android:layout_height="48dp"
                             android:background="@drawable/bg_rounded_hangup"
                             android:contentDescription="@null"
                             android:padding="12dp"
                             android:src="@drawable/ic_call_hangup" />
-
                     </LinearLayout>
-
                 </LinearLayout>
-
             </RelativeLayout>
-
         </LinearLayout>
-
     </LinearLayout>
-
 </android.support.design.widget.CoordinatorLayout>

@@ -11,6 +11,7 @@ import android.view.WindowManager;
 
 import com.parse.ParseUser;
 import com.phongbm.common.Profile;
+import com.phongbm.friend.Friend;
 import com.phongbm.home.MainFragment;
 
 public class SplashActivity extends AppCompatActivity {
@@ -31,6 +32,7 @@ public class SplashActivity extends AppCompatActivity {
 
         final ParseUser currentUser = ParseUser.getCurrentUser();
         if (currentUser != null) {
+            Friend.getInstance().getData();
             Profile.getInstance().getData(this);
             currentUser.put("online", true);
             currentUser.saveInBackground();

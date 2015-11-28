@@ -5,60 +5,53 @@ import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.phongbm.common.CommonValue;
+import com.phongbm.common.Profile;
 import com.phongbm.countrycode.CountryCodeActivity;
 import com.phongbm.freephonecall.MainActivity;
 import com.phongbm.freephonecall.R;
+import com.phongbm.friend.Friend;
 
 public class SignInFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = SignInFragment.class.getSimpleName();
-    private static final int REQUEST_COUNTRY_CODE = 0;
+    private static final int REQUEST_CODE_COUNTRY_CODE = 0;
     private static final int MIN_LENGTH_PHONE_NUMBER = 8;
     private static final int MAX_LENGTH_PHONE_NUMBER = 15;
     private static final int MIN_LENGTH_PASSWORD = 8;
 
     private View view;
-    private TextView buttonForgotPassword;
     private EditText edtPhoneNumber;
     private EditText edtPassword;
     private EditText edtCountryCode;
     private Button btnSignIn;
     private String countryCode;
-    private String phoneNumber;
-    private String password;
     private boolean isFillPhoneNumber;
     private boolean isFillPassword;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i(TAG, "onCreate...");
         this.setHasOptionsMenu(true);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.i(TAG, "onCreateView...");
         view = inflater.inflate(R.layout.fragment_sign_in, container, false);
         this.initializeToolbar();
         this.initializeComponent();
@@ -79,22 +72,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
         btnSignIn = (Button) view.findViewById(R.id.btn_sign_in);
         btnSignIn.setOnClickListener(this);
 
-        buttonForgotPassword = (TextView) view.findViewById(R.id.button_forgot_password);
-        buttonForgotPassword.setOnClickListener(this);
-        buttonForgotPassword.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        buttonForgotPassword.setTypeface(null, Typeface.BOLD);
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        buttonForgotPassword.setTypeface(null, Typeface.NORMAL);
-                        break;
-                }
-                return true;
-            }
-        });
+        view.findViewById(R.id.button_forgot_password).setOnClickListener(this);
 
         edtCountryCode = (EditText) view.findViewById(R.id.edt_country_code);
         edtCountryCode.setOnClickListener(this);
@@ -179,10 +157,12 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
         switch (view.getId()) {
             case R.id.edt_country_code:
                 Intent intent = new Intent(this.getActivity(), CountryCodeActivity.class);
-                this.startActivityForResult(intent, REQUEST_COUNTRY_CODE);
+                this.startActivityForResult(intent, REQUEST_CODE_COUNTRY_CODE);
                 break;
+
             case R.id.button_forgot_password:
                 break;
+
             case R.id.btn_sign_in:
                 final ProgressDialog progressDialog = new ProgressDialog(this.getActivity());
                 progressDialog.setTitle("Signing in");
@@ -190,17 +170,20 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
                 progressDialog.setCanceledOnTouchOutside(false);
                 progressDialog.show();
 
-                phoneNumber = edtPhoneNumber.getText().toString().trim();
+                String phoneNumber = edtPhoneNumber.getText().toString().trim();
                 if (phoneNumber.charAt(0) == '0') {
                     phoneNumber = phoneNumber.substring(1);
                 }
                 phoneNumber = countryCode + " " + phoneNumber;
-                password = edtPassword.getText().toString().trim();
+                String password = edtPassword.getText().toString().trim();
 
                 ParseUser.logInInBackground(phoneNumber, password, new LogInCallback() {
                     @Override
                     public void done(ParseUser parseUser, ParseException e) {
                         if (parseUser != null) {
+                            Friend.getInstance().getData();
+                            Profile.getInstance().getData(SignInFragment.this.getActivity().getBaseContext());
+
                             parseUser.put("online", true);
                             parseUser.saveInBackground();
                             progressDialog.dismiss();
@@ -211,18 +194,18 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
                                         public void onDismissed(Snackbar snackbar, int event) {
                                             super.onDismissed(snackbar, event);
                                             Intent intent = new Intent(getActivity(), MainActivity.class);
-                                            getActivity().startActivity(intent);
-                                            getActivity().finish();
+                                            SignInFragment.this.getActivity().startActivity(intent);
+                                            SignInFragment.this.getActivity().finish();
                                         }
                                     });
-                            View snackBarView = snackbar.getView();
-                            snackBarView.setBackgroundColor(Color.parseColor("#4caf50"));
+                            snackbar.getView().setBackgroundColor(Color.parseColor("#2196f3"));
                             snackbar.show();
                         } else {
                             progressDialog.dismiss();
-                            Snackbar.make(view, "There was an error logging in", Snackbar.LENGTH_LONG)
-                                    .setAction("ACTION", null)
-                                    .show();
+                            Snackbar snackbar = Snackbar.make(view, "There was an error logging in", Snackbar.LENGTH_LONG)
+                                    .setAction("ACTION", null);
+                            snackbar.getView().setBackgroundColor(Color.parseColor("#f44336"));
+                            snackbar.show();
                         }
                     }
                 });
@@ -232,7 +215,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_COUNTRY_CODE && resultCode == Activity.RESULT_OK && data != null) {
+        if (requestCode == REQUEST_CODE_COUNTRY_CODE && resultCode == Activity.RESULT_OK && data != null) {
             String content = data.getStringExtra(CommonValue.COUNTRY_CODE);
             countryCode = content.substring(content.indexOf("(+"));
             edtCountryCode.setText(content);

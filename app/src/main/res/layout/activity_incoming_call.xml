@@ -76,7 +76,7 @@
                     android:layout_height="240dp"
                     android:layout_centerInParent="true" />
 
-                <de.hdodenhof.circleimageview.CircleImageView
+                <com.phongbm.libraries.CircleImageView
                     android:id="@+id/imgAvatar"
                     android:layout_width="128dp"
                     android:layout_height="128dp"

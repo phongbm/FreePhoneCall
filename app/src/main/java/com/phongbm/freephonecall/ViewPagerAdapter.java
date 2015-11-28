@@ -1,6 +1,5 @@
 package com.phongbm.freephonecall;
 
-import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -11,11 +10,11 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     private ArrayList<Fragment> pages;
     private String[] titles = new String[]{"Friends", "Call Logs"};
 
-    public ViewPagerAdapter(Context context, FragmentManager fragmentManager) {
+    public ViewPagerAdapter(FragmentManager fragmentManager) {
         super(fragmentManager);
         pages = new ArrayList<>();
-        pages.add(new FriendFragment(context));
-        pages.add(new CallLogFragment(context));
+        pages.add(new FriendFragment());
+        pages.add(new CallLogFragment());
     }
 
     @Override

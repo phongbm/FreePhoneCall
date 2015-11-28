@@ -8,10 +8,6 @@ import android.view.WindowManager;
 
 import com.parse.Parse;
 import com.parse.ParseInstallation;
-import com.phongbm.freephonecall.ActiveFriendItem;
-import com.phongbm.freephonecall.AllFriendItem;
-
-import java.util.ArrayList;
 
 public class GlobalApplication extends Application {
     private static final String TAG = GlobalApplication.class.getSimpleName();
@@ -19,18 +15,12 @@ public class GlobalApplication extends Application {
     public static int heightScreen;
     public static float densityDPI;
 
-    private ArrayList<AllFriendItem> allFriendItems;
-    private ArrayList<ActiveFriendItem> activeFriendItems;
-
     @Override
     public void onCreate() {
         super.onCreate();
         Log.i(TAG, "onCreate()...");
         this.initializeParseServer();
         this.initializeComponent();
-
-        allFriendItems = new ArrayList<>();
-        activeFriendItems = new ArrayList<>();
     }
 
     private void initializeParseServer() {
@@ -45,22 +35,6 @@ public class GlobalApplication extends Application {
         widthScreen = metrics.widthPixels;
         heightScreen = metrics.heightPixels;
         densityDPI = metrics.densityDpi;
-    }
-
-    public ArrayList<AllFriendItem> getAllFriendItems() {
-        return allFriendItems;
-    }
-
-    public void setAllFriendItems(ArrayList<AllFriendItem> allFriendItems) {
-        this.allFriendItems = allFriendItems;
-    }
-
-    public ArrayList<ActiveFriendItem> getActiveFriendItems() {
-        return activeFriendItems;
-    }
-
-    public void setActiveFriendItems(ArrayList<ActiveFriendItem> activeFriendItems) {
-        this.activeFriendItems = activeFriendItems;
     }
 
 }

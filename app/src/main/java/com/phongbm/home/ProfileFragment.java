@@ -3,6 +3,7 @@ package com.phongbm.home;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -218,8 +219,48 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                     }
                 });
 
-                this.getActivity().startActivity(new Intent(this.getActivity(), MainActivity.class));
-                this.getActivity().finish();
+                final ProgressDialog progressDialog = new ProgressDialog(this.getActivity());
+                progressDialog.setMessage("Loading...");
+                progressDialog.setCanceledOnTouchOutside(false);
+                progressDialog.show();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressDialog.dismiss();
+                        ProfileFragment.this.getActivity().startActivity(
+                                new Intent(ProfileFragment.this.getActivity(), MainActivity.class));
+                        ProfileFragment.this.getActivity().finish();
+
+                        /*AlertDialog.Builder builder = new AlertDialog.Builder(ProfileFragment.this.getActivity());
+                        builder.setCancelable(false);
+                        builder.setTitle("Sign up successfully");
+                        builder.setMessage("Sign up successfully. Please confirm your email to continue");
+                        builder.setPositiveButton("Continue", null);
+                        final AlertDialog confirmDialog = builder.create();
+                        confirmDialog.getWindow().setWindowAnimations(R.style.AppTheme_Dialog_Animate);
+                        confirmDialog.show();
+                        Button positiveButton = confirmDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+                        positiveButton.setTextColor(ContextCompat.getColor(
+                                ProfileFragment.this.getActivity().getBaseContext(), R.color.blue_500));
+                        positiveButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Log.i(TAG, "" + ParseUser.getCurrentUser().getEmail());
+                                Log.i(TAG, "" + ParseUser.getCurrentUser().getBoolean("emailVerified"));
+                                Log.i(TAG, "" + ParseUser.getCurrentUser().getString("emailVerified"));
+
+                                boolean isVerified = ParseUser.getCurrentUser().getBoolean("emailVerified");
+                                Log.i(TAG, "isVerified: " + isVerified);
+                                if (isVerified) {
+                                    ProfileFragment.this.getActivity().startActivity(
+                                            new Intent(ProfileFragment.this.getActivity(), MainActivity.class));
+                                    confirmDialog.cancel();
+                                    ProfileFragment.this.getActivity().finish();
+                                }
+                            }
+                        });*/
+                    }
+                }, 3000);
                 break;
 
             case R.id.upload_photo:

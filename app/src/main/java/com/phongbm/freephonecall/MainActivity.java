@@ -1,7 +1,9 @@
 package com.phongbm.freephonecall;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,12 +13,14 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,57 +32,56 @@ import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
-import com.phongbm.common.CommonMethod;
 import com.phongbm.common.CommonValue;
 import com.phongbm.common.Profile;
+import com.phongbm.friend.ActiveFriendItem;
+import com.phongbm.friend.AllFriendItem;
+import com.phongbm.friend.Friend;
+import com.phongbm.home.MainFragment;
 import com.phongbm.libraries.CircleImageView;
 import com.phongbm.libraries.floatingactionmenu.FloatingActionMenu;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
     private static final String TAG = MainActivity.class.getSimpleName();
-    private static final int REQUEST_ADDITION_FRIEND = 0;
+    private static final int REQUEST_CODE_ADD_FRIEND = 0;
 
-    private ParseUser currentUser;
     private Toolbar toolbar;
     private CoordinatorLayout coordinatorLayout;
     private DrawerLayout drawer;
     private NavigationView navigationView;
     private FloatingActionMenu menu;
-    private ViewPagerAdapter viewPagerAdapter;
-    private ViewPager viewPager;
-    private TabLayout tab;
-    private FriendItem newFriend;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        currentUser = ParseUser.getCurrentUser();
-        CommonMethod.getInstance().loadListFriend(currentUser, this);
-
         this.setContentView(R.layout.activity_main);
+        this.initializeComponent();
+        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(this.getSupportFragmentManager());
+        ViewPager viewPager = (ViewPager) this.findViewById(R.id.view_pager);
+        viewPager.setAdapter(viewPagerAdapter);
+        TabLayout tab = (TabLayout) this.findViewById(R.id.tab);
+        tab.setupWithViewPager(viewPager);
+        this.startService();
+
+        if (ParseUser.getCurrentUser() != null) {
+            Log.i(TAG, "!= NULL");
+        }
+    }
+
+    private void initializeComponent() {
+        coordinatorLayout = (CoordinatorLayout) this.findViewById(R.id.coordinator_layout);
         this.initializeToolbar();
         this.initializeDrawerLayout();
         this.initializeNavigationView();
         this.initializeMyProfile();
         this.initializeFloatingActionMenu();
 
-        this.startService();
-
-        viewPagerAdapter = new ViewPagerAdapter(this, this.getSupportFragmentManager());
-        viewPager = (ViewPager) this.findViewById(R.id.view_pager);
-        viewPager.setAdapter(viewPagerAdapter);
-        tab = (TabLayout) this.findViewById(R.id.tab);
-        tab.setupWithViewPager(viewPager);
-    }
-
-    private void startService() {
-        Intent serviceIntent = new Intent();
-        serviceIntent.setClassName(CommonValue.PACKAGE_NAME, CommonValue.PACKAGE_NAME + ".FreePhoneCallService");
-        this.startService(serviceIntent);
+        this.findViewById(R.id.btn_add_friend).setOnClickListener(this);
+        this.findViewById(R.id.btn_voice_call).setOnClickListener(this);
     }
 
     private void initializeToolbar() {
@@ -92,8 +95,6 @@ public class MainActivity extends AppCompatActivity
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-
-        coordinatorLayout = (CoordinatorLayout) this.findViewById(R.id.coordinator_layout);
     }
 
     private void initializeNavigationView() {
@@ -103,16 +104,14 @@ public class MainActivity extends AppCompatActivity
 
     private void initializeMyProfile() {
         View headerView = navigationView.inflateHeaderView(R.layout.nav_header_main);
-
-        final CircleImageView imgAvatar = (CircleImageView) headerView.findViewById(R.id.img_avatar);
+        CircleImageView imgAvatar = (CircleImageView) headerView.findViewById(R.id.img_avatar);
         imgAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
             }
         });
-        final TextView txtFullName = (TextView) headerView.findViewById(R.id.txt_fullName);
-        final TextView txtEmail = (TextView) headerView.findViewById(R.id.txt_email);
-
+        TextView txtFullName = (TextView) headerView.findViewById(R.id.txt_fullName);
+        TextView txtEmail = (TextView) headerView.findViewById(R.id.txt_email);
         imgAvatar.setImageBitmap(Profile.getInstance().getAvatar());
         txtFullName.setText(Profile.getInstance().getFullName());
         txtEmail.setText(Profile.getInstance().getEmail());
@@ -127,6 +126,12 @@ public class MainActivity extends AppCompatActivity
             }
         });
         menu.setClosedOnTouchOutside(true);
+    }
+
+    private void startService() {
+        Intent serviceIntent = new Intent();
+        serviceIntent.setClassName(CommonValue.PACKAGE_NAME, CommonValue.PACKAGE_NAME + ".FreePhoneCallService");
+        this.startService(serviceIntent);
     }
 
     @Override
@@ -147,15 +152,48 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.nav_camara:
-                break;
+            case R.id.nav_logout:
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("Confirm");
+                builder.setMessage("Are you sure you want to Log Out?");
+                builder.setCancelable(true);
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        ParseUser currentUser = ParseUser.getCurrentUser();
+                        currentUser.put("online", false);
+                        currentUser.saveInBackground();
+                        ParseUser.logOut();
+
+                        if (ParseUser.getCurrentUser() != null) {
+                            Log.i(TAG, "!= NULL");
+                        } else {
+                            Log.i(TAG, "== NULL");
+                        }
+
+                        MainActivity.this.sendBroadcast(new Intent(CommonValue.ACTION_LOGOUT));
+                        dialog.dismiss();
+                        MainActivity.this.startActivity(new Intent(MainActivity.this, MainFragment.class));
+                        MainActivity.this.finish();
+                    }
+                });
+
+                AlertDialog logoutDialog = builder.create();
+                logoutDialog.getWindow().getAttributes().windowAnimations = R.style.AppTheme_Dialog_Animate;
+                logoutDialog.show();
+                logoutDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(
+                        ContextCompat.getColor(this, R.color.blue_500));
+                logoutDialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(
+                        ContextCompat.getColor(this, R.color.textPrimary));
+                return true;
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    public FriendItem getNewFriend() {
-        return newFriend;
     }
 
     private void createNewFriend(final ParseUser parseUser) {
@@ -170,8 +208,15 @@ public class MainActivity extends AppCompatActivity
                     }
                     final Bitmap avatar = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                     final String id = parseUser.getObjectId();
-                    newFriend = new FriendItem(id, avatar, parseUser.getUsername(),
-                            parseUser.getString("fullName"));
+                    final String phoneNumber = parseUser.getUsername();
+                    final String fullName = parseUser.getString("fullName");
+
+                    Friend.getInstance().getAllFriendItems().add(new AllFriendItem(id, phoneNumber, fullName, avatar));
+                    Collections.sort(Friend.getInstance().getAllFriendItems());
+                    if (parseUser.getBoolean("online")) {
+                        Friend.getInstance().getActiveFriendItems().add(new ActiveFriendItem(id, phoneNumber, fullName, avatar));
+                    }
+
                     Intent intentAddFriend = new Intent();
                     intentAddFriend.setAction(CommonValue.ACTION_ADD_FRIEND);
                     boolean isOnline = parseUser.getBoolean("online");
@@ -186,15 +231,16 @@ public class MainActivity extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
-                case REQUEST_ADDITION_FRIEND:
+                case REQUEST_CODE_ADD_FRIEND:
                     if (data == null) {
                         return;
                     }
                     String phoneNumber = data.getStringExtra("PHONE_NUMBER");
                     if (phoneNumber.equals(Profile.getInstance().getPhoneNumber())) {
-                        Snackbar.make(coordinatorLayout, "You can not make friends with yourself", Snackbar.LENGTH_LONG)
-                                .setAction("ACTION", null)
-                                .show();
+                        Snackbar snackbar = Snackbar.make(coordinatorLayout, "You can not make friends with yourself", Snackbar.LENGTH_LONG)
+                                .setAction("ACTION", null);
+                        snackbar.getView().setBackgroundColor(Color.parseColor("#f44336"));
+                        snackbar.show();
                         return;
                     }
                     final ProgressDialog progressDialog = new ProgressDialog(this);
@@ -212,16 +258,18 @@ public class MainActivity extends AppCompatActivity
                             if (e != null) {
                                 e.printStackTrace();
                                 progressDialog.dismiss();
-                                Snackbar.make(coordinatorLayout, "Error", Snackbar.LENGTH_LONG)
-                                        .setAction("ACTION", null)
-                                        .show();
+                                Snackbar snackbar = Snackbar.make(coordinatorLayout, "Error", Snackbar.LENGTH_LONG)
+                                        .setAction("ACTION", null);
+                                snackbar.getView().setBackgroundColor(Color.parseColor("#f44336"));
+                                snackbar.show();
                                 return;
                             }
                             if (parseUser == null) {
                                 progressDialog.dismiss();
-                                Snackbar.make(coordinatorLayout, "That account does not exist", Snackbar.LENGTH_LONG)
-                                        .setAction("ACTION", null)
-                                        .show();
+                                Snackbar snackbar = Snackbar.make(coordinatorLayout, "That account does not exist", Snackbar.LENGTH_LONG)
+                                        .setAction("ACTION", null);
+                                snackbar.getView().setBackgroundColor(Color.parseColor("#f44336"));
+                                snackbar.show();
                                 return;
                             }
                             ArrayList<String> listFriend = (ArrayList<String>) currentUser.get("listFriend");
@@ -229,13 +277,14 @@ public class MainActivity extends AppCompatActivity
                             if (listFriend == null) {
                                 listFriend = new ArrayList<>();
                             } else {
-                                /*if (listFriend.contains(newUserId)) {
+                                if (listFriend.contains(newUserId)) {
                                     progressDialog.dismiss();
-                                    Snackbar.make(coordinatorLayout, "That account has been identical", Snackbar.LENGTH_LONG)
-                                            .setAction("ACTION", null)
-                                            .show();
+                                    Snackbar snackbar = Snackbar.make(coordinatorLayout, "That account has been identical", Snackbar.LENGTH_LONG)
+                                            .setAction("ACTION", null);
+                                    snackbar.getView().setBackgroundColor(Color.parseColor("#f44336"));
+                                    snackbar.show();
                                     return;
-                                }*/
+                                }
                             }
                             listFriend.add(newUserId);
                             currentUser.put("listFriend", listFriend);
@@ -244,13 +293,26 @@ public class MainActivity extends AppCompatActivity
                             progressDialog.dismiss();
                             Snackbar snackbar = Snackbar.make(coordinatorLayout, "Addition friend successfully", Snackbar.LENGTH_LONG)
                                     .setAction("ACTION", null);
-                            View snackBarView = snackbar.getView();
-                            snackBarView.setBackgroundColor(Color.parseColor("#4caf50"));
+                            snackbar.getView().setBackgroundColor(Color.parseColor("#2196f3"));
                             snackbar.show();
                         }
                     });
                     break;
             }
+        }
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.btn_add_friend:
+                menu.close(true);
+                Intent newFriendIntent = new Intent(this, AdditionFriend.class);
+                this.startActivityForResult(newFriendIntent, REQUEST_CODE_ADD_FRIEND);
+                break;
+
+            case R.id.btn_voice_call:
+                break;
         }
     }
 

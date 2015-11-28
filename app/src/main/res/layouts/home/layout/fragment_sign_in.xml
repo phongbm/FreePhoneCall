@@ -128,20 +128,20 @@
 
                 <TextView
                     android:id="@+id/button_forgot_password"
-                    android:layout_width="match_parent"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="end"
+                    android:layout_gravity="end"
                     android:text="@string/forgot_password"
                     android:textColor="#666666"
-                    android:textSize="14sp"
+                    android:textSize="12sp"
                     android:textStyle="normal" />
 
                 <Button
                     android:id="@+id/btn_sign_in"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:background="@drawable/bg_button_round"
+                    android:background="@drawable/button_blue"
                     android:enabled="false"
                     android:text="@string/sign_in"
                     android:textColor="#ffffff"

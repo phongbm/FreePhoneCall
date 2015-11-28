@@ -31,7 +31,7 @@ import com.phongbm.freephonecall.R;
 
 public class SignUpFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = SignUpFragment.class.getSimpleName();
-    private static final int REQUEST_COUNTRY_CODE = 0;
+    private static final int REQUEST_CODE_COUNTRY_CODE = 0;
     private static final int MIN_LENGTH_PHONE_NUMBER = 8;
     private static final int MAX_LENGTH_PHONE_NUMBER = 15;
     private static final int MIN_LENGTH_PASSWORD = 8;
@@ -213,7 +213,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
         switch (view.getId()) {
             case R.id.edt_country_code:
                 Intent intent = new Intent(this.getActivity(), CountryCodeActivity.class);
-                this.startActivityForResult(intent, REQUEST_COUNTRY_CODE);
+                this.startActivityForResult(intent, REQUEST_CODE_COUNTRY_CODE);
                 break;
 
             case R.id.btn_sign_up:
@@ -257,14 +257,15 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                                             ((MainFragment) SignUpFragment.this.getActivity()).showProfileFragment();
                                         }
                                     });
-                            snackbar.getView().setBackgroundColor(Color.parseColor("#4caf50"));
+                            snackbar.getView().setBackgroundColor(Color.parseColor("#2196f3"));
                             snackbar.show();
                         } else {
                             e.printStackTrace();
                             progressDialog.dismiss();
-                            Snackbar.make(view, "There was an error signing up", Snackbar.LENGTH_LONG)
-                                    .setAction("ACTION", null)
-                                    .show();
+                            Snackbar snackbar = Snackbar.make(view, "There was an error signing up", Snackbar.LENGTH_LONG)
+                                    .setAction("ACTION", null);
+                            snackbar.getView().setBackgroundColor(Color.parseColor("#f44336"));
+                            snackbar.show();
                         }
                     }
                 });
@@ -274,7 +275,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_COUNTRY_CODE && resultCode == Activity.RESULT_OK && data != null) {
+        if (requestCode == REQUEST_CODE_COUNTRY_CODE && resultCode == Activity.RESULT_OK && data != null) {
             String content = data.getStringExtra(CommonValue.COUNTRY_CODE);
             countryCode = content.substring(content.indexOf("(+"));
             edtCountryCode.setText(content);

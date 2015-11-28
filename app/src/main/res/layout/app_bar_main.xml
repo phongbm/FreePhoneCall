@@ -56,10 +56,10 @@
             fab:menu_shadowColor="#444">
 
             <com.phongbm.libraries.floatingactionmenu.FloatingActionButton
-                android:id="@+id/btn_add_image"
+                android:id="@+id/btn_voice_call"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_plus"
+                android:src="@drawable/ic_call"
                 fab:fab_colorNormal="#f44336"
                 fab:fab_colorPressed="#d32f2f"
                 fab:fab_colorRipple="#e57373"
@@ -67,10 +67,10 @@
                 fab:fab_size="mini" />
 
             <com.phongbm.libraries.floatingactionmenu.FloatingActionButton
-                android:id="@+id/btn_add_icon"
+                android:id="@+id/btn_add_friend"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_plus"
+                android:src="@drawable/ic_add_user"
                 fab:fab_colorNormal="#4caf50"
                 fab:fab_colorPressed="#388e3c"
                 fab:fab_colorRipple="#81c784"
