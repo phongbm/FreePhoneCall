@@ -26,7 +26,7 @@ import com.phongbm.freephonecall.R;
 import java.io.ByteArrayOutputStream;
 
 public class ImageControl extends AppCompatActivity implements View.OnClickListener {
-    private static final String TAG = "ImageControl";
+    private static final String TAG = ImageControl.class.getSimpleName();
     public static final String EXTRA_IMAGE = "EXTRA_IMAGE";
     private static final int SIZE_IMAGE = GlobalApplication.widthScreen;
     private static final int HEIGHT_SCREEN = GlobalApplication.heightScreen;

@@ -54,7 +54,7 @@ public class CommonMethod implements Cloneable, Serializable {
                                  int notificationId, int icon, boolean noClear) {
         if (noClear) {
             // outGoingCall, inComingCall
-            Builder builder = new Builder(srcActivity).setSmallIcon(icon).setContentTitle("AHihi")
+            Builder builder = new Builder(srcActivity).setSmallIcon(icon).setContentTitle("Free Phone Call")
                     .setContentText(content).setAutoCancel(false);
             Intent intent = new Intent(srcActivity, destActivity);
             PendingIntent pendingIntent = PendingIntent.getService(srcActivity, notificationId,
@@ -67,7 +67,7 @@ public class CommonMethod implements Cloneable, Serializable {
             notificationManager.notify(notificationId, notification);
         } else {
             // missedCall
-            Builder builder = new Builder(srcActivity).setSmallIcon(icon).setContentTitle("AHihi")
+            Builder builder = new Builder(srcActivity).setSmallIcon(icon).setContentTitle("Free Phone Call")
                     .setContentText(content).setAutoCancel(true);
             Intent intent = new Intent(srcActivity, destActivity);
             PendingIntent pendingIntent = PendingIntent.getActivity(srcActivity, notificationId,

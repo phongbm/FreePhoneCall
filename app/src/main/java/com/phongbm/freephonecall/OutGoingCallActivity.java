@@ -3,7 +3,6 @@ package com.phongbm.freephonecall;
 import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -16,8 +15,9 @@ import android.os.Message;
 import android.os.SystemClock;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -33,25 +33,31 @@ import com.phongbm.libraries.CallingRippleView;
 import com.phongbm.libraries.CircleImageView;
 
 public class OutGoingCallActivity extends AppCompatActivity implements View.OnClickListener {
-    private static final int UPDATE_TIME_CALL = 1000;
+    private static final String TAG = OutGoingCallActivity.class.getSimpleName();
+    private static final int MESSAGE_UPDATE_TIME_CALL = 111;
     private static final int NOTIFICATION_CALLING = 0;
 
-    private ImageView btnEndCall;
+    private ImageButton btnEndCall;
     private TextView txtTime;
     private TextView txtFullName;
     private TextView txtPhoneNumber;
     private CircleImageView imgAvatar;
     private CallingRippleView callingRipple;
-    private BroadcastOutgoingCall broadcastOutgoingCall;
+    private OutGoingCallReceiver outGoingCallReceiver;
     private int timeCall = 0;
-    private String id, time, fullName, phoneNumber, date = null;
-    private boolean isCalling = false, isPressBtnEndCall = false;
+    private String id;
+    private String time;
+    private String fullName;
+    private String phoneNumber;
+    private String date = null;
+    private boolean isCalling = false;
+    private boolean isPressBtnEndCall = false;
 
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
-                case UPDATE_TIME_CALL:
+                case MESSAGE_UPDATE_TIME_CALL:
                     txtTime.setText("Time call: " + time);
                     break;
             }
@@ -63,25 +69,28 @@ public class OutGoingCallActivity extends AppCompatActivity implements View.OnCl
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_outgoing_call);
         this.initializeComponent();
-        this.registerBroadcastOutgoingCall();
+
         Intent intent = new Intent(CommonValue.ACTION_OUTGOING_CALL);
         intent.putExtra(CommonValue.INCOMING_CALL_ID, id);
         this.sendBroadcast(intent);
-        CommonMethod.getInstance().pushNotification(this, MainActivity.class, "Calling...",
-                NOTIFICATION_CALLING, R.drawable.ic_plus, true);
+
+        this.registerOutGoingCallReceiver();
+
+        CommonMethod.getInstance().pushNotification(this, MainActivity.class,
+                "Calling...", NOTIFICATION_CALLING, R.drawable.ic_calling, true);
     }
 
     private void initializeComponent() {
-        btnEndCall = (ImageView) findViewById(R.id.btn_end_call);
+        btnEndCall = (ImageButton) this.findViewById(R.id.btn_end_call);
         btnEndCall.setOnClickListener(this);
 
-        this.findViewById(R.id.btn_ring_tone).setOnClickListener(this);
+        this.findViewById(R.id.btn_speaker).setOnClickListener(this);
 
-        txtTime = (TextView) findViewById(R.id.txt_time);
-        txtFullName = (TextView) findViewById(R.id.txt_full_name);
-        txtPhoneNumber = (TextView) findViewById(R.id.txt_phone_number);
-        imgAvatar = (CircleImageView) findViewById(R.id.img_avatar);
-        callingRipple = (CallingRippleView) findViewById(R.id.calling_ripple);
+        txtTime = (TextView) this.findViewById(R.id.txt_time);
+        txtFullName = (TextView) this.findViewById(R.id.txt_full_name);
+        txtPhoneNumber = (TextView) this.findViewById(R.id.txt_phone_number);
+        imgAvatar = (CircleImageView) this.findViewById(R.id.img_avatar);
+        callingRipple = (CallingRippleView) this.findViewById(R.id.calling_ripple);
 
         Intent intent = this.getIntent();
         id = intent.getStringExtra(CommonValue.INCOMING_CALL_ID);
@@ -90,21 +99,25 @@ public class OutGoingCallActivity extends AppCompatActivity implements View.OnCl
         parseQuery.getFirstInBackground(new GetCallback<ParseUser>() {
             @Override
             public void done(ParseUser parseUser, ParseException e) {
-                if (parseUser == null) {
+                if (parseUser == null || e != null) {
+                    e.printStackTrace();
+                    Log.i(TAG, e.getMessage());
                     return;
                 }
                 fullName = (String) parseUser.get("fullName");
                 txtFullName.setText(fullName);
                 phoneNumber = parseUser.getUsername();
                 txtPhoneNumber.setText("Mobile " + phoneNumber);
-                ParseFile parseFile = (ParseFile) parseUser.get("avatar");
-                if (parseFile == null) {
+                ParseFile avatarFile = (ParseFile) parseUser.get("avatar");
+                if (avatarFile == null) {
                     return;
                 }
-                parseFile.getDataInBackground(new GetDataCallback() {
+                avatarFile.getDataInBackground(new GetDataCallback() {
                     @Override
                     public void done(byte[] bytes, ParseException e) {
                         if (e != null) {
+                            e.printStackTrace();
+                            Log.i(TAG, e.getMessage());
                             return;
                         }
                         Bitmap avatar = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
@@ -118,51 +131,46 @@ public class OutGoingCallActivity extends AppCompatActivity implements View.OnCl
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.btnEndCall:
+            case R.id.btn_end_call:
                 isCalling = false;
                 date = CommonMethod.getInstance().getCurrentDateTime();
                 isPressBtnEndCall = true;
                 btnEndCall.setEnabled(false);
-                Intent intentEndCall = new Intent(CommonValue.ACTION_END_CALL);
-                this.sendBroadcast(intentEndCall);
+                this.sendBroadcast(new Intent(CommonValue.ACTION_END_CALL));
                 break;
 
-            case R.id.btn_ring_tone:
-                AudioManager audioManager = (AudioManager) this
-                        .getSystemService(Context.AUDIO_SERVICE);
+            case R.id.btn_speaker:
+                AudioManager audioManager = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
                 audioManager.adjustStreamVolume(AudioManager.STREAM_RING,
                         AudioManager.ADJUST_SAME, AudioManager.FLAG_SHOW_UI);
                 break;
         }
     }
 
-    private void registerBroadcastOutgoingCall() {
-        if (broadcastOutgoingCall == null) {
-            broadcastOutgoingCall = new BroadcastOutgoingCall();
-            IntentFilter intentFilter = new IntentFilter();
-            intentFilter.addAction(CommonValue.STATE_END_CALL);
-            intentFilter.addAction(CommonValue.STATE_PICK_UP);
-            this.registerReceiver(broadcastOutgoingCall, intentFilter);
+    private void registerOutGoingCallReceiver() {
+        if (outGoingCallReceiver == null) {
+            outGoingCallReceiver = new OutGoingCallReceiver();
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(CommonValue.STATE_PICK_UP);
+            filter.addAction(CommonValue.STATE_END_CALL);
+            this.registerReceiver(outGoingCallReceiver, filter);
         }
     }
 
-    private class BroadcastOutgoingCall extends BroadcastReceiver {
+    private class OutGoingCallReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
             switch (intent.getAction()) {
                 case CommonValue.STATE_PICK_UP:
                     isCalling = true;
-                    Thread threadTimeCall = new Thread(runnableTimeCall);
-                    threadTimeCall.start();
-                    OutGoingCallActivity.this.setVolumeControlStream(
-                            AudioManager.STREAM_VOICE_CALL);
+                    new Thread(runnableTimeCall).start();
+                    OutGoingCallActivity.this.setVolumeControlStream(AudioManager.STREAM_VOICE_CALL);
                     break;
 
                 case CommonValue.STATE_END_CALL:
                     if (timeCall != 0) {
                         isCalling = false;
-                        String endCall = "End Call: " + time;
-                        txtTime.setText(endCall);
+                        txtTime.setText("End Call: " + time);
                     } else {
                         if (isPressBtnEndCall) {
                             txtTime.setText("Call Ended");
@@ -176,15 +184,7 @@ public class OutGoingCallActivity extends AppCompatActivity implements View.OnCl
                     btnEndCall.setEnabled(false);
                     txtTime.setBackgroundColor(ContextCompat.getColor(OutGoingCallActivity.this, R.color.red_500));
                     callingRipple.setVisibility(RelativeLayout.GONE);
-                    OutGoingCallActivity.this.setVolumeControlStream(
-                            AudioManager.USE_DEFAULT_STREAM_TYPE);
-
-                    ContentValues contentValues = new ContentValues();
-                    contentValues.put("id", id);
-                    contentValues.put("fullName", fullName);
-                    contentValues.put("phoneNumber", phoneNumber);
-                    contentValues.put("date", date);
-                    contentValues.put("state", "outGoingCall");
+                    OutGoingCallActivity.this.setVolumeControlStream(AudioManager.USE_DEFAULT_STREAM_TYPE);
 
                     (new Handler()).postDelayed(new Runnable() {
                         @Override
@@ -203,7 +203,7 @@ public class OutGoingCallActivity extends AppCompatActivity implements View.OnCl
             while (isCalling) {
                 timeCall += 1000;
                 time = CommonMethod.getInstance().convertTimeToString(timeCall);
-                handler.sendEmptyMessage(UPDATE_TIME_CALL);
+                handler.sendEmptyMessage(MESSAGE_UPDATE_TIME_CALL);
                 SystemClock.sleep(1000);
             }
         }
@@ -211,9 +211,8 @@ public class OutGoingCallActivity extends AppCompatActivity implements View.OnCl
 
     @Override
     protected void onDestroy() {
-        this.unregisterReceiver(broadcastOutgoingCall);
-        ((NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE))
-                .cancel(NOTIFICATION_CALLING);
+        this.unregisterReceiver(outGoingCallReceiver);
+        ((NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE)).cancel(NOTIFICATION_CALLING);
         super.onDestroy();
     }
 

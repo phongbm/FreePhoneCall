@@ -118,16 +118,12 @@ public class FreePhoneCallService extends Service implements SinchClientListener
 
         @Override
         public void onCallEstablished(Call call) {
-            Intent intentPickUp = new Intent();
-            intentPickUp.setAction(CommonValue.STATE_PICK_UP);
-            FreePhoneCallService.this.sendBroadcast(intentPickUp);
+            FreePhoneCallService.this.sendBroadcast(new Intent(CommonValue.STATE_PICK_UP));
         }
 
         @Override
         public void onCallEnded(Call call) {
-            Intent intentEndCall = new Intent();
-            intentEndCall.setAction(CommonValue.STATE_END_CALL);
-            FreePhoneCallService.this.sendBroadcast(intentEndCall);
+            FreePhoneCallService.this.sendBroadcast(new Intent(CommonValue.STATE_END_CALL));
         }
 
         @Override

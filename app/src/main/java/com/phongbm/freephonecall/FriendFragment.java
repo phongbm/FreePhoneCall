@@ -43,7 +43,6 @@ public class FriendFragment extends Fragment implements View.OnClickListener, On
     private ActiveFriendAdapter activeFriendAdapter;
     private boolean isShowTabActive = true;
     private boolean isOnline = true;
-    // private boolean enableTabAllFriend = false;
     private UpdateFriendReceiver updateFriendReceiver;
 
     public FriendFragment() {
@@ -149,9 +148,6 @@ public class FriendFragment extends Fragment implements View.OnClickListener, On
                 break;
 
             case R.id.tab_all_friends:
-                /*if (!enableTabAllFriend) {
-                    enableTabAllFriend = true;
-                }*/
                 this.changeStateShow(tabAllFriends);
                 this.changeStateHide(tabActive);
                 listViewFriend.setAdapter(allFriendAdapter);

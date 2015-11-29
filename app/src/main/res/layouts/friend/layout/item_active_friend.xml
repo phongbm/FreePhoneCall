@@ -24,9 +24,10 @@
         android:layout_marginTop="28dp"
         android:background="@drawable/bg_circle_white"
         android:contentDescription="@null"
-        android:padding="1dp"
+        android:padding="4dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/ic_plus" />
+        android:src="@drawable/ic_call"
+        android:tint="@color/blue_500" />
 
     <TextView
         android:id="@+id/txt_name"

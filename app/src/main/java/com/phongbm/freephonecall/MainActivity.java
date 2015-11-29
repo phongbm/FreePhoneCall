@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -20,7 +21,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -58,6 +58,20 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        final ProgressDialog loadingDialog = new ProgressDialog(this);
+        loadingDialog.setCancelable(false);
+        loadingDialog.setCanceledOnTouchOutside(false);
+        loadingDialog.setTitle("Free Phone Call");
+        loadingDialog.setMessage("Loading data...");
+        loadingDialog.show();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                loadingDialog.dismiss();
+            }
+        }, 3000);
+
         this.setContentView(R.layout.activity_main);
         this.initializeComponent();
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(this.getSupportFragmentManager());
@@ -66,10 +80,6 @@ public class MainActivity extends AppCompatActivity
         TabLayout tab = (TabLayout) this.findViewById(R.id.tab);
         tab.setupWithViewPager(viewPager);
         this.startService();
-
-        if (ParseUser.getCurrentUser() != null) {
-            Log.i(TAG, "!= NULL");
-        }
     }
 
     private void initializeComponent() {
@@ -152,6 +162,12 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.nav_about:
+                drawer.closeDrawer(GravityCompat.START);
+                this.startActivity(new Intent(this, AboutUsActivity.class));
+                this.overridePendingTransition(R.anim.dialog_enter, R.anim.dialog_exit);
+                return true;
+
             case R.id.nav_logout:
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle("Confirm");
@@ -170,11 +186,7 @@ public class MainActivity extends AppCompatActivity
                         currentUser.saveInBackground();
                         ParseUser.logOut();
 
-                        if (ParseUser.getCurrentUser() != null) {
-                            Log.i(TAG, "!= NULL");
-                        } else {
-                            Log.i(TAG, "== NULL");
-                        }
+                        Friend.getInstance().clearData();
 
                         MainActivity.this.sendBroadcast(new Intent(CommonValue.ACTION_LOGOUT));
                         dialog.dismiss();
@@ -192,7 +204,6 @@ public class MainActivity extends AppCompatActivity
                         ContextCompat.getColor(this, R.color.textPrimary));
                 return true;
         }
-        drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 

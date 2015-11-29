@@ -93,6 +93,11 @@ public class Friend implements Cloneable, Serializable {
         }
     }
 
+    public void clearData() {
+        allFriendItems.clear();
+        activeFriendItems.clear();
+    }
+
     public ArrayList<AllFriendItem> getAllFriendItems() {
         return allFriendItems;
     }

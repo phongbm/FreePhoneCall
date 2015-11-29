@@ -52,6 +52,10 @@
 
         <activity android:name="com.phongbm.freephonecall.InComingCallActivity" />
 
+        <activity
+            android:name="com.phongbm.freephonecall.AboutUsActivity"
+            android:label="@string/about_us" />
+
         <service
             android:name="com.phongbm.freephonecall.FreePhoneCallService"
             android:enabled="true"
