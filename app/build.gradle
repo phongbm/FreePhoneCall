@@ -20,13 +20,14 @@ android {
     sourceSets {
         main {
             res.srcDirs = ['src/main/res',
+                           'src/main/res/drawables',
+                           'src/main/res/drawables/home',
                            'src/main/res/layouts',
                            'src/main/res/layouts/home',
                            'src/main/res/layouts/countrycode',
-                           'src/main/res/drawables',
-                           'src/main/res/drawables/home',
                            'src/main/res/layouts/image',
-                           'src/main/res/layouts/friend']
+                           'src/main/res/layouts/friend',
+                           'src/main/res/layouts/call']
         }
     }
 }

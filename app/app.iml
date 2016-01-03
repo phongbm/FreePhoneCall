@@ -21,7 +21,7 @@
         <option name="ALLOW_USER_CONFIGURATION" value="false" />
         <option name="MANIFEST_FILE_RELATIVE_PATH" value="/src/main/AndroidManifest.xml" />
         <option name="RES_FOLDER_RELATIVE_PATH" value="/src/main/res" />
-        <option name="RES_FOLDERS_RELATIVE_PATH" value="file://$MODULE_DIR$/src/main/res/drawables;file://$MODULE_DIR$/src/main/res/drawables/home;file://$MODULE_DIR$/src/main/res;file://$MODULE_DIR$/src/main/res/layouts;file://$MODULE_DIR$/src/main/res/layouts/friend;file://$MODULE_DIR$/src/main/res/layouts/image;file://$MODULE_DIR$/src/main/res/layouts/home;file://$MODULE_DIR$/src/main/res/layouts/countrycode" />
+        <option name="RES_FOLDERS_RELATIVE_PATH" value="file://$MODULE_DIR$/src/main/res;file://$MODULE_DIR$/src/main/res/drawables;file://$MODULE_DIR$/src/main/res/drawables/home;file://$MODULE_DIR$/src/main/res/layouts;file://$MODULE_DIR$/src/main/res/layouts/home;file://$MODULE_DIR$/src/main/res/layouts/countrycode;file://$MODULE_DIR$/src/main/res/layouts/image;file://$MODULE_DIR$/src/main/res/layouts/call;file://$MODULE_DIR$/src/main/res/layouts/friend" />
         <option name="ASSETS_FOLDER_RELATIVE_PATH" value="/src/main/assets" />
       </configuration>
     </facet>
@@ -51,13 +51,14 @@
       <sourceFolder url="file://$MODULE_DIR$/src/debug/jni" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/debug/rs" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/res" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/main/res/drawables" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/main/res/drawables/home" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/res/layouts" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/res/layouts/home" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/res/layouts/countrycode" type="java-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/main/res/drawables" type="java-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/main/res/drawables/home" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/res/layouts/image" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/res/layouts/friend" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/main/res/layouts/call" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/assets" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/aidl" isTestSource="false" />

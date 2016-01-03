@@ -6,11 +6,9 @@ import android.media.MediaPlayer;
 import com.phongbm.freephonecall.R;
 
 public class RingtoneManager {
-    private Context context;
     private MediaPlayer mediaPlayer;
 
     public RingtoneManager(Context context) {
-        this.context = context;
         mediaPlayer = MediaPlayer.create(context, R.raw.ringtone);
     }
 

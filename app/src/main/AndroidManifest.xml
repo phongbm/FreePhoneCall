@@ -48,9 +48,9 @@
             android:name="com.phongbm.freephonecall.AdditionFriend"
             android:theme="@style/AppTheme.Dialog" />
 
-        <activity android:name="com.phongbm.freephonecall.OutGoingCallActivity" />
+        <activity android:name="com.phongbm.call.OutGoingCallActivity" />
 
-        <activity android:name="com.phongbm.freephonecall.InComingCallActivity" />
+        <activity android:name="com.phongbm.call.InComingCallActivity" />
 
         <activity
             android:name="com.phongbm.freephonecall.AboutUsActivity"

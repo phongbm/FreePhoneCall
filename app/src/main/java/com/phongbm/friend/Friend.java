@@ -102,16 +102,8 @@ public class Friend implements Cloneable, Serializable {
         return allFriendItems;
     }
 
-    public void setAllFriendItems(ArrayList<AllFriendItem> allFriendItems) {
-        this.allFriendItems = allFriendItems;
-    }
-
     public ArrayList<ActiveFriendItem> getActiveFriendItems() {
         return activeFriendItems;
-    }
-
-    public void setActiveFriendItems(ArrayList<ActiveFriendItem> activeFriendItems) {
-        this.activeFriendItems = activeFriendItems;
     }
 
 }

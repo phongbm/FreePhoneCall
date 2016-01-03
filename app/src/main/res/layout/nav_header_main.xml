@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="160dp"
+    android:layout_height="182dp"
     android:background="@drawable/side_nav_bar"
     android:gravity="bottom"
     android:orientation="vertical"
@@ -12,16 +12,16 @@
         android:id="@+id/img_avatar"
         android:layout_width="64dp"
         android:layout_height="64dp"
+        android:layout_marginBottom="16dp"
         android:contentDescription="@null"
-        android:paddingTop="16dp"
         android:scaleType="centerCrop"
         android:src="@drawable/ic_avatar_default" />
 
     <TextView
         android:id="@+id/txt_fullName"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="16dp"
+        android:gravity="center_vertical"
         android:text="Free Phone Call"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 

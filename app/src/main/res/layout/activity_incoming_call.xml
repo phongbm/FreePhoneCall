@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.phongbm.freephonecall.InComingCallActivity">
+    tools:context="com.phongbm.call.InComingCallActivity">
 
     <LinearLayout
         android:layout_width="match_parent"

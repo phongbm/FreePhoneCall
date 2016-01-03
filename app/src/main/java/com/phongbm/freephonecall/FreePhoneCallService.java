@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.IBinder;
+import android.util.Log;
 
 import com.parse.ParseUser;
 import com.phongbm.common.CommonValue;
@@ -123,6 +124,7 @@ public class FreePhoneCallService extends Service implements SinchClientListener
 
         @Override
         public void onCallEnded(Call call) {
+            Log.i(TAG, "onCallEnded...");
             FreePhoneCallService.this.sendBroadcast(new Intent(CommonValue.STATE_END_CALL));
         }
 
@@ -137,8 +139,7 @@ public class FreePhoneCallService extends Service implements SinchClientListener
             inComingCall = call;
             inComingCall.addCallListener(this);
             Intent inComingCallIntent = new Intent();
-            inComingCallIntent.setClassName(CommonValue.PACKAGE_NAME,
-                    CommonValue.PACKAGE_NAME + ".InComingCallActivity");
+            inComingCallIntent.setClassName(CommonValue.PACKAGE_NAME, "com.phongbm.call.InComingCallActivity");
             inComingCallIntent.putExtra(CommonValue.OUTGOING_CALL_ID, call.getRemoteUserId());
             inComingCallIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(inComingCallIntent);
@@ -160,6 +161,7 @@ public class FreePhoneCallService extends Service implements SinchClientListener
             Intent intentEndCall = new Intent();
             intentEndCall.setAction(CommonValue.STATE_END_CALL);
             FreePhoneCallService.this.sendBroadcast(intentEndCall);
+            Log.i(TAG, "onCallEnded 2...");
         }
 
         @Override
@@ -214,10 +216,12 @@ public class FreePhoneCallService extends Service implements SinchClientListener
 
                 case CommonValue.ACTION_END_CALL:
                     if (outGoingCall != null) {
+                        Log.i(TAG, "outGoingCall != null...");
                         outGoingCall.hangup();
                         outGoingCall = null;
                     }
                     if (inComingCall != null) {
+                        Log.i(TAG, "inComingCall != null...");
                         inComingCall.hangup();
                         inComingCall = null;
                     }
