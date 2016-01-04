@@ -172,7 +172,7 @@ public class FriendFragment extends Fragment implements View.OnClickListener, On
     }
 
     @Override
-    public void onShowPopupMenuListener(int position, View view) {
+    public void onShowPopupMenuListener(final int position, View view) {
         final String inComingId;
         if (isShowTabActive) {
             inComingId = activeFriendAdapter.getItem(position).getId();
@@ -188,12 +188,25 @@ public class FriendFragment extends Fragment implements View.OnClickListener, On
                         Intent outGoingCallIntent = new Intent(getActivity(), OutGoingCallActivity.class);
                         outGoingCallIntent.putExtra(CommonValue.INCOMING_CALL_ID, inComingId);
                         FriendFragment.this.getActivity().startActivity(outGoingCallIntent);
-                        break;
+                        return true;
 
                     case R.id.action_view_profile:
-                        break;
+                        return true;
+
+                    case R.id.action_location:
+                        Intent locationIntent = new Intent(CommonValue.ACTION_LOCATION);
+                        locationIntent.putExtra(CommonValue.INCOMING_CALL_ID, inComingId);
+                        String fullName;
+                        if (isShowTabActive) {
+                            fullName = activeFriendAdapter.getItem(position).getFullName();
+                        } else {
+                            fullName = allFriendAdapter.getItem(position).getFullName();
+                        }
+                        locationIntent.putExtra("FULL_NAME", fullName);
+                        FriendFragment.this.getActivity().sendBroadcast(locationIntent);
+                        return true;
                 }
-                return true;
+                return false;
             }
         });
         popup.show();

@@ -15,12 +15,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 import com.phongbm.call.CallLogAdapter;
 import com.phongbm.call.CallLogItem;
 import com.phongbm.call.CallLogsDBManager;
+import com.phongbm.call.OutGoingCallActivity;
 import com.phongbm.common.CommonValue;
 
 import java.util.ArrayList;
@@ -58,6 +60,14 @@ public class CallLogFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_call_log, container, false);
         listViewCallLog = (ListView) view.findViewById(R.id.list_view_callLog);
+        listViewCallLog.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent outGoingCallIntent = new Intent(getActivity(), OutGoingCallActivity.class);
+                outGoingCallIntent.putExtra(CommonValue.INCOMING_CALL_ID, callLogItems.get(position).getId());
+                CallLogFragment.this.getActivity().startActivity(outGoingCallIntent);
+            }
+        });
         layoutNoCallLogs = (RelativeLayout) view.findViewById(R.id.layout_no_callLog);
 
         if (callLogItems.size() == 0) {

@@ -13,6 +13,7 @@ public class CommonValue {
     public static final String ACTION_END_CALL = "ACTION_END_CALL";
     public static final String ACTION_ANSWER = "ACTION_ANSWER";
     public static final String ACTION_LOGOUT = "ACTION_LOGOUT";
+    public static final String ACTION_LOCATION = "ACTION_LOCATION";
     public static final String INCOMING_CALL_ID = "INCOMING_CALL_ID";
     public static final String OUTGOING_CALL_ID = "OUTGOING_CALL_ID";
     public static final String ACTION_UPDATE_CALL_LOG = "ACTION_UPDATE_CALL_LOG";
