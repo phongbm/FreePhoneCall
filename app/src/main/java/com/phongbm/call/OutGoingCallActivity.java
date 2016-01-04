@@ -177,7 +177,6 @@ public class OutGoingCallActivity extends AppCompatActivity implements View.OnCl
                         return;
                     }
                     firstReceive = true;
-                    Log.i(TAG, "STATE_END_CALL...");
 
                     if (timeCall != 0) {
                         isCalling = false;

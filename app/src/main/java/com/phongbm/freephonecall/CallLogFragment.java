@@ -60,6 +60,7 @@ public class CallLogFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_call_log, container, false);
         listViewCallLog = (ListView) view.findViewById(R.id.list_view_callLog);
+        listViewCallLog.setAdapter(callLogAdapter);
         listViewCallLog.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -76,7 +77,6 @@ public class CallLogFragment extends Fragment {
             layoutNoCallLogs.setVisibility(RelativeLayout.VISIBLE);
         } else {
             canDelete = true;
-            listViewCallLog.setAdapter(callLogAdapter);
         }
 
         return view;
@@ -170,8 +170,10 @@ public class CallLogFragment extends Fragment {
             callLogAdapter.notifyDataSetChanged();
 
             canDelete = true;
-            listViewCallLog.setVisibility(RelativeLayout.VISIBLE);
-            layoutNoCallLogs.setVisibility(RelativeLayout.GONE);
+            if (callLogAdapter.getCount() == 1) {
+                listViewCallLog.setVisibility(RelativeLayout.VISIBLE);
+                layoutNoCallLogs.setVisibility(RelativeLayout.GONE);
+            }
         }
     }
 

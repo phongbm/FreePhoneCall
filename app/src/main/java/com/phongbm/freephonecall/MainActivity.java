@@ -32,6 +32,7 @@ import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.phongbm.call.CallLogsDBManager;
 import com.phongbm.common.CommonValue;
 import com.phongbm.common.Profile;
 import com.phongbm.friend.ActiveFriendItem;
@@ -185,6 +186,10 @@ public class MainActivity extends AppCompatActivity
                         currentUser.put("online", false);
                         currentUser.saveInBackground();
                         ParseUser.logOut();
+
+                        CallLogsDBManager callLogsDBManager = new CallLogsDBManager(MainActivity.this);
+                        callLogsDBManager.deleteAllData();
+                        callLogsDBManager.closeDatabase();
 
                         Friend.getInstance().clearData();
 
